@@ -1,1 +1,1 @@
-# Spring-Boot-Mybatis-Oracle
+# Jhipster-Mybatis-Oracle
