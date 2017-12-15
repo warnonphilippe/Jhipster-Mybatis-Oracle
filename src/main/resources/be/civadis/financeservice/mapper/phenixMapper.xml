@@ -1,0 +1,2276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="be.civadis.financeservice.mapper.PhenixMapper">
+
+    <select id="test" resultType="long">
+        select 1 from dual
+    </select>
+
+    <select id="getNumberBC" parameterType="hashMap" statementType="CALLABLE">
+        { CALL NCCC_PACK_EGOV.nccc_get_number_bc(
+            #{exercice, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{num_doc, mode=OUT, jdbcType=BIGINT, javaType=Long}
+        ) }
+    </select>
+
+    <select id="checkDisponibleEngagement" parameterType="hashMap" resultType="long">
+        select NCCC_PACK_EGOV.nccc_check_rest_imput_Ed(
+        #{id_engagement, jdbcType=BIGINT, javaType=Long},
+        #{montant, jdbcType=NUMERIC, javaType=BigDecimal}
+        ) from dual
+    </select>
+
+    <select id="checkDisponibleArticle" parameterType="hashMap" resultType="long">
+        select NCCC_PACK_EGOV.nccc_check_disponible_article(
+            #{id_article, jdbcType=BIGINT, javaType=Long},
+            #{montant, jdbcType=NUMERIC, javaType=BigDecimal}
+        ) from dual
+    </select>
+
+    <select id="checkDispReservCredit" parameterType="hashMap" resultType="long">
+        select NCCC_PACK_EGOV.nccc_check_disp_reserv_credit(
+            #{id_reserv_credit, jdbcType=BIGINT, javaType=Long},
+            #{montant, jdbcType=NUMERIC, javaType=BigDecimal}
+        ) from dual
+    </select>
+
+    <select id="getIdTiersBC" parameterType="hashMap" resultType="long">
+        select NCCC_PACK_EGOV.nccc_get_id_tiers_bc(
+            #{exercice, jdbcType=VARCHAR, javaType=String},
+            #{num_doc, jdbcType=BIGINT, javaType=Long}
+        ) from dual
+    </select>
+
+    <select id="getMntEngBC" parameterType="hashMap" resultType="double">
+        select NCCC_PACK_EGOV.nccc_get_mnt_epng_bc(
+            #{exercice, jdbcType=VARCHAR, javaType=String},
+            #{num_doc, jdbcType=BIGINT, javaType=Long}
+        ) from dual
+    </select>
+
+    <select id="getNumEngBC" parameterType="hashMap" resultType="double">
+        select NCCC_PACK_EGOV.nccc_get_num_eng_bc(
+            #{exercice, jdbcType=VARCHAR, javaType=String},
+            #{num_doc, jdbcType=BIGINT, javaType=Long}
+        ) from dual
+    </select>
+
+    <select id="addReservCredit" parameterType="ReservationCredit" statementType="CALLABLE">
+        { CALL NCCC_PACK_EGOV.nccc_add_reserv_credit(
+        #{id_info_art_budget, mode=IN, jdbcType=BIGINT, javaType=Long},
+        #{montant, mode=IN, jdbcType=NUMERIC, javaType=BigDecimal},
+        #{lib_1lg, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{id_info, mode=OUT, jdbcType=BIGINT, javaType=Long},
+        #{code_retour, mode=OUT, jdbcType=VARCHAR, javaType=String}
+        ) }
+    </select>
+
+    <select id="fillEgovBC" parameterType="BonCommandeEgov" statementType="CALLABLE">
+        { CALL NCCC_PACK_EGOV.nccc_fill_egov_bc(
+            #{an_exercice, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{num_doc, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{date_doc, mode=IN, jdbcType=DATE, javaType=Date},
+            #{lib_1lg, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{lib_2lg, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{id_info_art_budg, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{id_info_depart, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{livraison_1lg, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{livraison_2lg, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{reduction_tva, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{pourc_reduction_tva, mode=IN, jdbcType=NUMERIC, javaType=BigDecimal},
+            #{mess_reduct_tva_1lg, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{mess_reduct_tva_2lg, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{responsable_dossier, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{reference, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{reference_struct, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{date_ech, mode=IN, jdbcType=DATE, javaType=Date},
+            #{tiers_id_info, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{mnt_ttc_euro, mode=IN, jdbcType=NUMERIC, javaType=BigDecimal},
+            #{mnt_tva_euro, mode=IN, jdbcType=NUMERIC, javaType=BigDecimal},
+            #{is_assujetti_tva_bc, jdbcType=NUMERIC, javaType=Boolean, typeHandler=be.civadis.financeservice.utils.BooleanAsNumberHandler},
+            #{pourcentage_tva_bc, mode=IN, jdbcType=NUMERIC, javaType=BigDecimal},
+            #{base_imposable_bc, mode=IN, jdbcType=NUMERIC, javaType=BigDecimal},
+            #{tva_a_declarer_bc, mode=IN, jdbcType=NUMERIC, javaType=BigDecimal},
+            #{id_service, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{id_marche_3p, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{num_lot_3p, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{id_info_reserv, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{id_info, mode=OUT, jdbcType=BIGINT, javaType=Long},
+            #{codeRetour, mode=OUT, jdbcType=VARCHAR, javaType=String}
+        ) }
+    </select>
+
+    <update id="importDocumentBC" parameterType="DocumentBC" statementType="CALLABLE">
+        { CALL NCCC_PACK_EGOV.nccc_fill_egov_bc_blob(
+            #{bonCommandeIdInfo, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{document, mode=IN, jdbcType=BLOB},
+            #{typeDocument, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{nomDocument, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{idDocument, mode=OUT, jdbcType=BIGINT, javaType=Long},
+            #{codeRetour, mode=OUT, jdbcType=VARCHAR, javaType=String}
+        ) }
+    </update>
+
+    <select id="findDepartements" resultType="hashMap">
+        select id_info_depart, cod_depart, TRIM(lib_1lg) as lib_1lg, TRIM(lib_2lg) as lib_2lg
+        from nccc_departement
+        where id_info_depart >= 0
+    </select>
+
+    <select id="findDepartementsByCriteria" resultType="hashMap">
+        select id_info_depart, cod_depart, TRIM(lib_1lg) as lib_1lg, TRIM(lib_2lg) as lib_2lg
+        from nccc_departement
+        where id_info_depart >= 0
+
+        <if test="code != null">
+            and lower(cod_depart) = lower(#{code, javaType=String})
+        </if>
+
+        <if test="libelle != null">
+            and lower(upper(TRIM(lib_1lg))) = lower(#{libelle, javaType=String})
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+
+
+    <select id="findArticleIdByExerciceAndCode" resultType="long" parameterType="hashMap">
+        select
+            min(nccc_art_budget.id_info_art_budget)
+        from
+            nccc_art_budget
+        where 1=1
+        <if test="exercice != null">
+            and nccc_art_budget.an_exercice = #{exercice, javaType=String}
+        </if>
+        and lower(trim(nccc_art_budget.article)) = lower(trim(#{article, javaType=String}))
+    </select>
+
+
+    <select id="findArticleBudgetByExercice" resultType="hashMap" parameterType="hashMap">
+        select
+        nccc_art_budget.id_info_art_budget,
+        nccc_art_budget.an_exercice,
+        nccc_art_budget.article,
+        nccc_art_budget.lib_1lg,
+        nccc_art_budget.lib_2lg,
+        decode(nccc_code_economique.cod_dep_recette,'10','Depense','Recette') as type,
+        decode(nccc_code_economique.cod_srv,'10','Ordinaire','Extraordinaire') as service,
+        nccc_art_budget.mnt_compte_n_moins_2_euro,
+        nccc_art_budget.mnt_compte_n_moins_1_euro,
+        nccc_art_budget.mnt_n_moins_1_euro,
+        nccc_art_budget.mnt_adapte_n_moins_1_euro,
+        nccc_art_budget.mnt_n_euro,
+        nccc_art_budget.credit_actuel_dispo_euro,
+        nccc_art_budget.calcul4_euro,
+        nccc_art_budget.calcul5_euro,
+        nccc_art_budget.is_assujetti_tva
+        from
+        nccc_art_budget,
+        nccc_code_economique
+        where
+        nccc_art_budget.an_exercice = nccc_code_economique.an_exerc_budget
+        and  nccc_art_budget.id_info_codeco = nccc_code_economique.id_info_codeco
+
+        <if test="exercice != null">
+            and  nccc_art_budget.an_exercice = #{exercice, javaType=String}
+        </if>
+
+        <if test="article != null">
+            and  lower(nccc_art_budget.article) = lower(#{article, javaType=String})
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+
+    <select id="findArticleBudgetByService" resultType="hashMap" parameterType="hashMap">
+        select
+        nccc_art_budget.id_info_art_budget,
+        nccc_art_budget.an_exercice,
+        nccc_art_budget.article,
+        nccc_art_budget.lib_1lg,
+        nccc_art_budget.lib_2lg,
+        decode(nccc_code_economique.cod_dep_recette,'10','Depense','Recette') as type,
+        decode(nccc_code_economique.cod_srv,'10','Ordinaire','Extraordinaire') as service,
+        nccc_art_budget.mnt_compte_n_moins_5_euro,
+        nccc_art_budget.mnt_compte_n_moins_4_euro,
+        nccc_art_budget.mnt_compte_n_moins_3_euro,
+        nccc_art_budget.mnt_compte_n_moins_2_euro,
+        nccc_art_budget.mnt_compte_n_moins_1_euro,
+        nccc_art_budget.mnt_n_moins_1_euro,
+        nccc_art_budget.mnt_adapte_n_moins_1_euro,
+        nccc_art_budget.mnt_n_euro,
+        nccc_art_budget.credit_actuel_dispo_euro,
+        nccc_art_budget.calcul4_euro,
+        nccc_art_budget.calcul5_euro,
+        nccc_art_budget.is_assujetti_tva,
+        nccc_art_budget.id_info_depart
+        from
+        nccc_art_budget,
+        nccc_code_economique
+        where
+        nccc_art_budget.an_exercice = nccc_code_economique.an_exerc_budget
+        and  nccc_art_budget.id_info_codeco = nccc_code_economique.id_info_codeco
+
+        <if test="whereServiceIds != null">
+            and ( ${whereServiceIds} )
+        </if>
+
+        <if test="exerciceLower != null">
+            and  nccc_art_budget.an_exercice >= #{exerciceLower, javaType=String}
+        </if>
+
+        <if test="exerciceUpper != null">
+            <![CDATA[ and  nccc_art_budget.an_exercice <= #{exerciceUpper, javaType=String}]]>
+        </if>
+
+        <if test="article != null">
+            and  lower(nccc_art_budget.article) = lower(#{article, javaType=String})
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+    </select>
+
+    <select id="findArticleInfo" resultType="hashMap" parameterType="hashMap" >
+        Select
+        nccc_art_budget.an_exercice,
+        nccc_codes_fonctionnels.cod_fonct,
+        nccc_code_economique.cod_eco,
+        nccc_code_economique.num_ord,
+        nccc_art_budget.an_millesime,
+        nccc_art_budget.code_analy_libre,
+        nccc_art_budget.is_assujetti_tva,
+        nccc_departement.cod_depart,
+        nccc_projet_ext.cod_prj
+        from
+        nccc_art_budget,
+        nccc_codes_fonctionnels,
+        nccc_code_economique,
+        nccc_departement,
+        nccc_projet_ext
+        where
+        nccc_art_budget.id_info_codfonc  = nccc_codes_fonctionnels.id_info_codfonc
+        and  nccc_art_budget.id_info_codeco    = nccc_code_economique.id_info_codeco
+        and  nccc_art_budget.id_info_depart      = nccc_departement.id_info_depart (+)
+        and  nccc_art_budget.id_info_prj             = nccc_projet_ext.id_info_prj (+)
+        and  nccc_art_budget.article  = #{article, javaType=String}
+        and  nccc_art_budget.an_exercice  = #{exercice, javaType=String}
+    </select>
+
+    <select id="findFournisseur" resultType="hashMap">
+        select nccc_tiers.id_info,
+        nccc_cpt_part.num_compte_particul,
+        nccc_tiers.cpt_bancaire_1,
+        nccc_tiers.cpt_bancaire_2,
+        trim(nom) nom,
+        trim(prenom) prenom,
+        trim(nom_rue_1LG) rue,
+        trim(nom_rue2_1LG) rue2,
+        num_rue numero,
+        num_rue2 numero2,
+        trim(decode(nccc_localite.id_info,null,CODE_POSTAL_TXT, nccc_localite.code_postal)) code_postal,
+        trim(decode(nccc_localite2.id_info,null,CODE_POSTAL_TXT2, nccc_localite2.code_postal)) code_postal2,
+        trim(decode(nccc_localite.id_info,null,LOCALITE_TXT_1LG,nccc_localite.lib_1lg)) localite,
+        trim(decode(nccc_localite2.id_info,null,LOCALITE_TXT2_1LG,nccc_localite2.lib_1lg)) localite2,
+        trim(decode(nccc_pays.id_info,null,PAYS_TXT_1LG,nccc_pays.lib_1lg)) pays,
+        trim(decode(nccc_pays2.id_info,null,PAYS_TXT2_1LG,nccc_pays2.lib_1lg)) pays2,
+        nccc_tiers.num_regist_natio,
+        nccc_tiers.num_tva
+        from nccc_tiers,
+        nccc_cpt_part_tiers,
+        nccc_cpt_part,
+        nccc_localite,
+        nccc_localite nccc_localite2,
+        nccc_pays,
+        nccc_pays nccc_pays2
+        where nccc_tiers.id_info = nccc_cpt_part_tiers.id_info_tiers
+        and nccc_localite.id_info (+) = nccc_tiers.id_info_loc
+        and nccc_localite2.id_info (+) = nccc_tiers.id_info_loc2
+        and nccc_pays.id_info (+) = nccc_localite.id_info_pays
+        and nccc_pays2.id_info (+) = nccc_localite2.id_info_pays
+        and nccc_cpt_part_tiers.id_info_cpt_part = nccc_cpt_part.id_info
+        and nccc_cpt_part.cod_pref in ('TVA','0000')
+
+        <if test="id != null">
+            and nccc_cpt_part.id_info = #{id, javaType=Long}
+        </if>
+
+        <if test="nom != null">
+            and lower(trim(trim(nom) || ' ' || prenom)) like lower(#{nom, javaType=String})
+        </if>
+
+        <if test="numTVA != null">
+            and nccc_tiers.num_tva like #{numTVA, javaType=String}
+        </if>
+
+        <if test="numNat != null">
+            and nccc_tiers.num_regist_natio like #{numNat, javaType=String}
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+    <select id="findFournisseurIds" resultType="long">
+        select nccc_tiers.id_info
+        from nccc_tiers,
+        nccc_cpt_part_tiers,
+        nccc_cpt_part,
+        nccc_localite
+        where nccc_tiers.id_info = nccc_cpt_part_tiers.id_info_tiers
+        and nccc_localite.id_info (+) = nccc_tiers.id_info_loc
+        and nccc_cpt_part_tiers.id_info_cpt_part = nccc_cpt_part.id_info
+        and nccc_cpt_part.cod_pref in ('TVA','0000')
+
+        <if test="id != null">
+            and nccc_cpt_part.id_info = #{id, javaType=Long}
+        </if>
+
+        <if test="nom != null">
+            and lower(trim(trim(nom) || ' ' || prenom)) like lower(#{nom, javaType=String})
+        </if>
+
+        <if test="numTVA != null">
+            and nccc_tiers.num_tva like #{numTVA, javaType=String}
+        </if>
+
+        <if test="numNat != null">
+            and nccc_tiers.num_regist_natio like #{numNat, javaType=String}
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+    <select id="countFournisseur" resultType="long">
+        select count(nccc_tiers.id_info)
+        from nccc_tiers,
+        nccc_cpt_part_tiers,
+        nccc_cpt_part,
+        nccc_localite
+        where nccc_tiers.id_info = nccc_cpt_part_tiers.id_info_tiers
+        and nccc_localite.id_info (+) = nccc_tiers.id_info_loc
+        and nccc_cpt_part_tiers.id_info_cpt_part = nccc_cpt_part.id_info
+        and nccc_cpt_part.cod_pref in ('TVA','0000')
+
+        <if test="id != null">
+            and nccc_cpt_part.id_info = #{id, javaType=Long}
+        </if>
+
+        <if test="nom != null">
+            and lower(trim(trim(nom) || ' ' || prenom)) like lower(#{nom, javaType=String})
+        </if>
+
+        <if test="numTVA != null">
+            and nccc_tiers.num_tva like #{numTVA, javaType=String}
+        </if>
+
+        <if test="numNat != null">
+            and nccc_tiers.num_regist_natio like #{numNat, javaType=String}
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+    <select id="findDroitsConstatesByCriteria" resultType="hashMap" >
+        select dcd.id_info,
+            NCCC_CPT_PART_A.LIB_1LG tiers,
+            NCCC_CPT_PART_B.LIB_1LG tiers_benef,
+            dcd.NUM_ETAPE_FL num_piece,
+            dcd.LIB_1LG lib_piece,
+            dcd.AN_EXERCICE exercice,
+            nvl(dcd.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,dcd.mnt_tva_euro,0),0) montant_htva_def,
+            nvl(dcd.MNT_TTC_EURO,0) montant_ttc_def,
+            nvl(nccc_get_sum_nv_sur_dd(dcd.id_info,'EUR', 1),0) montant_htva_nv,
+            nvl(nccc_get_sum_nv_sur_dd(dcd.id_info,'EUR'),0) montant_ttc_nv,
+            nvl(dcd.CALCUL1_EURO,0) montant_a_percevoir,
+            doc.TYPE_DOC piece_justif
+        from NCCC_ETAPE_FL_DEP dcd, NCCC_FLUX_DEP, NCCC_CPT_PART NCCC_CPT_PART_A, NCCC_CPT_PART NCCC_CPT_PART_B, NCCC_DOCUMENT doc, NCCC_ETAPE_DOCUMENT
+        WHERE NCCC_FLUX_DEP.ID_INFO = dcd.ID_INFO_FLUX and dcd.TYP_ETAPE_FL= 21
+            and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART_A.ID_INFO (+)
+            and dcd.id_cpt_part_tiers_benef = NCCC_CPT_PART_B.ID_INFO (+)
+            and NCCC_ETAPE_DOCUMENT.ID_INFO_DOC = doc.ID_INFO (+)
+            and NCCC_ETAPE_DOCUMENT.ID_INFO_ETAPE (+) = dcd.id_info
+            <if test="articleId != null">
+                and NCCC_FLUX_DEP.id_info_art_budget = #{articleId, javaType=Long}
+            </if>
+            <if test="exercice != null">
+                and dcd.AN_EXERCICE= #{exercice, javaType=Long}
+            </if>
+            <if test="numeroDroit != null">
+                and dcd.NUM_ETAPE_FL = #{numeroDroit, javaType=Long}
+            </if>
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+        order by exercice, num_piece
+    </select>
+
+    <select id="findDroitConstateById" resultType="hashMap" >
+        select dcd.id_info,
+            NCCC_CPT_PART_A.LIB_1LG tiers,
+            NCCC_CPT_PART_B.LIB_1LG tiers_benef,
+            dcd.NUM_ETAPE_FL num_piece,
+            dcd.LIB_1LG lib_piece,
+            dcd.AN_EXERCICE exercice,
+            nvl(dcd.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,dcd.mnt_tva_euro,0),0) montant_htva_def,
+            nvl(dcd.MNT_TTC_EURO,0) montant_ttc_def,
+            nvl(nccc_get_sum_nv_sur_dd(dcd.id_info,'EUR', 1),0) montant_htva_nv,
+            nvl(nccc_get_sum_nv_sur_dd(dcd.id_info,'EUR'),0) montant_ttc_nv,
+            nvl(dcd.CALCUL1_EURO,0) montant_a_percevoir,
+            doc.TYPE_DOC piece_justif
+        from NCCC_ETAPE_FL_DEP dcd, NCCC_FLUX_DEP, NCCC_CPT_PART NCCC_CPT_PART_A, NCCC_CPT_PART NCCC_CPT_PART_B, NCCC_DOCUMENT doc, NCCC_ETAPE_DOCUMENT
+        WHERE NCCC_FLUX_DEP.ID_INFO = dcd.ID_INFO_FLUX and dcd.TYP_ETAPE_FL= 21
+            and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART_A.ID_INFO (+)
+            and dcd.id_cpt_part_tiers_benef = NCCC_CPT_PART_B.ID_INFO (+)
+            and NCCC_ETAPE_DOCUMENT.ID_INFO_DOC = doc.ID_INFO (+)
+            and NCCC_ETAPE_DOCUMENT.ID_INFO_ETAPE (+) = dcd.id_info
+            and dcd.id_info = #{droitConstateId, javaType=Long}
+    </select>
+
+    <select id="findEngagementsDefinitifsByArticleId" resultType="hashMap">
+        select ed.id_info,
+        NCCC_CPT_PART.LIB_1LG tiers,
+        ed.NUM_ETAPE_FL num_piece,
+        ed.LIB_1LG lib_piece,
+        nvl(ed.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,ed.mnt_tva_euro,0),0) montant_ed,
+        nvl(Nccc_Get_Mnt_PE_Ed (ed.ID_INFO,'EURO',1),0) montant_pe,
+        nvl(NCCC_GET_SUM_IM_ED (ed.ID_INFO,'EURO',1),0) montant_imput,
+        nvl(Nccc_Get_Sum_Im_Ed_paye_op (ed.ID_INFO,'EURO'),0) montant_paye_op,
+        nvl(Nccc_Get_Sum_Im_Ed_paye (ed.ID_INFO,'EURO'),0) montant_paye_ext,
+        ed.date_compta,
+        ed.date_ech,
+        NCCC_FLUX_DEP.id_info_art_budget id_info_art_budget
+
+
+        from NCCC_ETAPE_FL_DEP ed, NCCC_FLUX_DEP, NCCC_CPT_PART
+
+        WHERE NCCC_FLUX_DEP.ID_INFO = ed.ID_INFO_FLUX and ed.TYP_ETAPE_FL= 2
+
+        and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART.ID_INFO (+)
+        and NCCC_FLUX_DEP.id_info_art_budget = #{articleId, javaType=Long}
+
+        order by  num_piece
+
+    </select>
+
+    <select id="findProjetsExtraordinairesByCriteria" resultType="hashMap">
+        select distinct NCCC_PROJET_EXT.ID_INFO_PRJ,
+        NCCC_PROJET_EXT.COD_PRJ,
+        NCCC_PROJET_EXT.LIB_1LG,
+        NCCC_PROJET_EXT.LIB_2LG,
+        NCCC_PROJET_EXT.AN_CLOTURE
+        from NCCC_PROJET_EXT
+        <if test="exercice != null">
+            join NCCC_ART_BUDGET on NCCC_ART_BUDGET.ID_INFO_PRJ = NCCC_PROJET_EXT.ID_INFO_PRJ
+        </if>
+        where 1 = 1
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="exercice != null">
+          and NCCC_ART_BUDGET.AN_EXERCICE = #{exercice, javaType=String}
+        </if>
+
+        <if test="codeProjet != null">
+            and lower(trim(NCCC_PROJET_EXT.COD_PRJ)) like lower(#{codeProjet, javaType=String} || '%')
+        </if>
+
+        <if test="libelle != null">
+            and lower(trim(NCCC_PROJET_EXT.LIB_1LG)) like lower('%' || #{libelle, javaType=String} || '%')
+        </if>
+
+        <if test="projetId != null">
+            and NCCC_PROJET_EXT.ID_INFO_PRJ = #{projetId, javaType=Long}
+        </if>
+
+    </select>
+
+
+    <select id="countProjetsExtraordinairesByCriteria" resultType="long" parameterType="hashMap">
+        select count(*) from (
+
+            select distinct NCCC_PROJET_EXT.ID_INFO_PRJ
+            from NCCC_PROJET_EXT
+            <if test="exercice != null">
+                join NCCC_ART_BUDGET on NCCC_ART_BUDGET.ID_INFO_PRJ = NCCC_PROJET_EXT.ID_INFO_PRJ
+            </if>
+            where 1 = 1
+
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+
+            <if test="exercice != null">
+                and NCCC_ART_BUDGET.AN_EXERCICE = #{exercice, javaType=String}
+            </if>
+
+            <if test="codeProjet != null">
+                and lower(trim(NCCC_PROJET_EXT.COD_PRJ)) like lower(#{codeProjet, javaType=String} || '%')
+            </if>
+
+            <if test="libelle != null">
+                and lower(trim(NCCC_PROJET_EXT.LIB_1LG)) like lower('%' || #{libelle, javaType=String} || '%')
+            </if>
+
+            <if test="projetId != null">
+                and NCCC_PROJET_EXT.ID_INFO_PRJ = #{projetId, javaType=Long}
+            </if>
+        )
+    </select>
+
+
+    <select id="findProjetsExtraordinairesIdListByCriteria" resultType="long" parameterType="hashMap">
+        select distinct NCCC_PROJET_EXT.ID_INFO_PRJ
+        from NCCC_PROJET_EXT
+        <if test="exercice != null">
+            join NCCC_ART_BUDGET on NCCC_ART_BUDGET.ID_INFO_PRJ = NCCC_PROJET_EXT.ID_INFO_PRJ
+        </if>
+        where 1 = 1
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="exercice != null">
+            and NCCC_ART_BUDGET.AN_EXERCICE = #{exercice, javaType=String}
+        </if>
+
+        <if test="codeProjet != null">
+            and lower(trim(NCCC_PROJET_EXT.COD_PRJ)) like lower(#{codeProjet, javaType=String} || '%')
+        </if>
+
+        <if test="libelle != null">
+            and lower(trim(NCCC_PROJET_EXT.LIB_1LG)) like lower('%' || #{libelle, javaType=String} || '%')
+        </if>
+
+        <if test="projetId != null">
+            and NCCC_PROJET_EXT.ID_INFO_PRJ = #{projetId, javaType=Long}
+        </if>
+
+    </select>
+
+    <select id="findProjetExtraordinaireById" resultType="hashMap">
+        select NCCC_PROJET_EXT.ID_INFO_PRJ,
+        NCCC_PROJET_EXT.COD_PRJ,
+        NCCC_PROJET_EXT.LIB_1LG,
+        NCCC_PROJET_EXT.LIB_2LG,
+        NCCC_PROJET_EXT.AN_CLOTURE
+        from NCCC_PROJET_EXT
+        WHERE NCCC_PROJET_EXT.ID_INFO_PRJ = #{projetId, javaType=Long}
+    </select>
+
+    <select id="findEngagementsDefinitifsByCriteria" resultType="hashMap">
+        select ed.id_info,
+        ed.an_exercice as exercice,
+        NCCC_CPT_PART.LIB_1LG tiers,
+        ed.NUM_ETAPE_FL num_piece,
+        ed.LIB_1LG lib_piece,
+        nvl(ed.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,ed.mnt_tva_euro,0),0) montant_ed,
+        nvl(Nccc_Get_Mnt_PE_Ed (ed.ID_INFO,'EURO',1),0) montant_pe,
+        nvl(NCCC_GET_SUM_IM_ED (ed.ID_INFO,'EURO',1),0) montant_imput,
+        nvl(Nccc_Get_Sum_Im_Ed_paye_op (ed.ID_INFO,'EURO'),0) montant_paye_op,
+        nvl(Nccc_Get_Sum_Im_Ed_paye (ed.ID_INFO,'EURO'),0) montant_paye_ext,
+        ed.date_compta,
+        ed.date_ech,
+        NCCC_FLUX_DEP.id_info_art_budget id_info_art_budget
+
+        from NCCC_ETAPE_FL_DEP ed, NCCC_FLUX_DEP, NCCC_CPT_PART
+
+        WHERE NCCC_FLUX_DEP.ID_INFO = ed.ID_INFO_FLUX and ed.TYP_ETAPE_FL= 2
+
+        and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART.ID_INFO (+)
+
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="articleId != null">
+            and NCCC_FLUX_DEP.id_info_art_budget = #{articleId, javaType=Long}
+        </if>
+
+        <if test="exercice != null">
+            and ed.an_exercice = #{exercice, javaType=Long}
+        </if>
+
+        <if test="numeroEngagement != null">
+            and ed.NUM_ETAPE_FL = #{numeroEngagement, javaType=Long}
+        </if>
+
+        order by num_piece
+
+    </select>
+
+
+    <select id="countEngagementsDefinitifsByCriteria" resultType="long" parameterType="hashMap">
+        select count(*) from (
+            select ed.id_info,
+            NCCC_CPT_PART.LIB_1LG tiers,
+            ed.NUM_ETAPE_FL num_piece,
+            ed.LIB_1LG lib_piece,
+            nvl(ed.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,ed.mnt_tva_euro,0),0) montant_ed,
+            nvl(Nccc_Get_Mnt_PE_Ed (ed.ID_INFO,'EURO',1),0) montant_pe,
+            nvl(NCCC_GET_SUM_IM_ED (ed.ID_INFO,'EURO',1),0) montant_imput,
+            nvl(Nccc_Get_Sum_Im_Ed_paye_op (ed.ID_INFO,'EURO'),0) montant_paye_op,
+            nvl(Nccc_Get_Sum_Im_Ed_paye (ed.ID_INFO,'EURO'),0) montant_paye_ext,
+            ed.date_compta,
+            ed.date_ech
+
+            from NCCC_ETAPE_FL_DEP ed, NCCC_FLUX_DEP, NCCC_CPT_PART
+
+            WHERE NCCC_FLUX_DEP.ID_INFO = ed.ID_INFO_FLUX and ed.TYP_ETAPE_FL= 2
+
+            and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART.ID_INFO (+)
+
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+
+            <if test="articleId != null">
+                and NCCC_FLUX_DEP.id_info_art_budget = #{articleId, javaType=Long}
+            </if>
+
+            <if test="exercice != null">
+                and ed.an_exercice = #{exercice, javaType=Long}
+            </if>
+
+            <if test="numeroEngagement != null">
+                and ed.NUM_ETAPE_FL = #{numeroEngagement, javaType=Long}
+            </if>
+        )
+    </select>
+
+
+    <select id="findEngagementsDefinitifIdListByCriteria" resultType="long" parameterType="hashMap">
+        select ed.id_info
+
+        from NCCC_ETAPE_FL_DEP ed, NCCC_FLUX_DEP, NCCC_CPT_PART
+
+        WHERE NCCC_FLUX_DEP.ID_INFO = ed.ID_INFO_FLUX and ed.TYP_ETAPE_FL= 2
+
+        and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART.ID_INFO (+)
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="articleId != null">
+            and NCCC_FLUX_DEP.id_info_art_budget = #{articleId, javaType=Long}
+        </if>
+
+        <if test="exercice != null">
+            and ed.an_exercice = #{exercice, javaType=Long}
+        </if>
+
+        <if test="numeroEngagement != null">
+            and ed.NUM_ETAPE_FL = #{numeroEngagement, javaType=Long}
+        </if>
+    </select>
+
+    <select id="findEngagementDefinitifById" resultType="hashMap">
+        select ed.id_info,
+        ed.an_exercice as exercice,
+        NCCC_CPT_PART.LIB_1LG tiers,
+        ed.NUM_ETAPE_FL num_piece,
+        ed.LIB_1LG lib_piece,
+        nvl(ed.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,ed.mnt_tva_euro,0),0) montant_ed,
+        nvl(Nccc_Get_Mnt_PE_Ed (ed.ID_INFO,'EURO',1),0) montant_pe,
+        nvl(NCCC_GET_SUM_IM_ED (ed.ID_INFO,'EURO',1),0) montant_imput,
+        nvl(Nccc_Get_Sum_Im_Ed_paye_op (ed.ID_INFO,'EURO'),0) montant_paye_op,
+        nvl(Nccc_Get_Sum_Im_Ed_paye (ed.ID_INFO,'EURO'),0) montant_paye_ext,
+        ed.date_compta,
+        ed.date_ech,
+        NCCC_FLUX_DEP.id_info_art_budget id_info_art_budget
+
+        from NCCC_ETAPE_FL_DEP ed, NCCC_FLUX_DEP, NCCC_CPT_PART
+
+        WHERE NCCC_FLUX_DEP.ID_INFO = ed.ID_INFO_FLUX and ed.TYP_ETAPE_FL= 2
+        and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART.ID_INFO (+)
+        and ed.id_info = #{engagementDefinitifId, javaType=Long}
+
+    </select>
+
+    <select id="findImputationsByCriteria" resultType="hashMap">
+        select imput.id_info,
+        NCCC_CPT_PART.LIB_1LG tiers,
+        nccc_get_liste_benef_imp_1lg(imput.ID_INFO , 1)   tiers_benef,
+        nccc_get_liste_benef_imp_1lg(imput.ID_INFO , 200) tiers_benefs,
+        imput.NUM_ETAPE_FL num_piece,
+        imput.LIB_1LG lib_piece,
+        sum(nvl(imput.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,imput.mnt_tva_euro,0),0)) montant_imput,
+        sum(nvl(Nccc_Get_Sum_Imp_paye_op(imput.id_info,'EUR'),0)) montant_paye_op,
+        sum(nvl(Nccc_Get_Sum_Imp_paye(imput.id_info,'EUR'),0)) montant_paye_ext,
+        imput.date_compta,
+        imput.date_ech
+
+        from NCCC_ETAPE_FL_DEP imput, NCCC_FLUX_DEP, NCCC_CPT_PART
+
+        WHERE NCCC_FLUX_DEP.ID_INFO = imput.ID_INFO_FLUX and imput.TYP_ETAPE_FL= 5
+
+        and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART.ID_INFO (+)
+
+        <if test="articleId != null">
+            and NCCC_FLUX_DEP.id_info_art_budget = #{articleId, javaType=Long}
+        </if>
+
+        <if test="engagementDefinitifId != null">
+            and imput.ID_ETAPE_FL_DEP_1 = #{engagementDefinitifId, javaType=Long}
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        group by NCCC_CPT_PART.LIB_1LG, imput.ID_INFO, imput.AN_EXERCICE, imput.NUM_ETAPE_FL, imput.LIB_1LG, imput.date_compta, imput.date_ech
+
+        order by num_piece
+
+    </select>
+
+    <select id="findImputationById" resultType="hashMap">
+        select imput.id_info,  NCCC_CPT_PART.LIB_1LG tiers,
+            nccc_get_liste_benef_imp_1lg(imput.ID_INFO , 1)   tiers_benef,
+            nccc_get_liste_benef_imp_1lg(imput.ID_INFO , 200) tiers_benefs,
+            imput.NUM_ETAPE_FL num_piece,
+            imput.LIB_1LG lib_piece,
+            sum(nvl(imput.MNT_TTC_EURO,0) - nvl(decode(NCCC_FLUX_DEP.is_assujetti_tva,1,imput.mnt_tva_euro,0),0)) montant_imput,
+            sum(nvl(Nccc_Get_Sum_Imp_paye_op(imput.id_info,'EUR'),0)) montant_paye_op,
+            sum(nvl(Nccc_Get_Sum_Imp_paye(imput.id_info,'EUR'),0)) montant_paye_ext,
+            imput.date_compta,
+            imput.date_ech
+
+        from NCCC_ETAPE_FL_DEP imput, NCCC_FLUX_DEP, NCCC_CPT_PART
+
+        WHERE NCCC_FLUX_DEP.ID_INFO = imput.ID_INFO_FLUX and imput.TYP_ETAPE_FL= 5
+            and nccc_flux_dep.id_cpt_part_tiers_princ = NCCC_CPT_PART.ID_INFO (+)
+            and imput.id_info = #{imputationId, javaType=Long}
+
+        group by NCCC_CPT_PART.LIB_1LG, imput.ID_INFO, imput.AN_EXERCICE, imput.NUM_ETAPE_FL, imput.LIB_1LG, imput.date_compta, imput.date_ech
+    </select>
+
+    <select id="findOrdresPaiementByImputationId" resultType="hashMap">
+        select ec.id_info, ec.date_compta, lop.mnt_ttc_euro
+        from NCCC_ETAPE_FL_DEP im, NCCC_ETAPE_FL_DEP lop, NCCC_DOCUMENT ec
+            WHERE im.ID_INFO = #{imputationId, javaType=Long}
+            AND im.ID_INFO = lop.ID_ETAPE_FL_DEP_1
+            AND lop.TYP_ETAPE_FL= 6
+            AND lop.CODE_ETAT_1='3'
+            AND lop.ID_DOCT_2 = ec.id_info
+    </select>
+
+    <select id="findOrdrePaiementById" resultType="hashMap">
+        select ec.id_info, ec.date_compta, lop.mnt_ttc_euro
+        from NCCC_ETAPE_FL_DEP lop, NCCC_DOCUMENT ec
+        WHERE lop.TYP_ETAPE_FL= 6
+        AND lop.CODE_ETAT_1='3'
+        AND lop.ID_DOCT_2 = ec.id_info
+        AND ec.id_info = #{ordrePaiementId, javaType=Long}
+    </select>
+
+    <select id="findExtraitsCompteByImputationId" resultType="hashMap">
+        select ec.id_info, ec.date_doc, lop.mnt_ttc_euro
+            from NCCC_ETAPE_FL_DEP im, NCCC_ETAPE_FL_DEP lop, NCCC_ETAPE_FL_DEP lex, NCCC_DOCUMENT ec
+        WHERE im.ID_INFO  = #{imputationId, javaType=Long}
+            AND im.ID_INFO = lop.ID_ETAPE_FL_DEP_1 AND lop.TYP_ETAPE_FL= 6
+            AND lop.ID_INFO = lex.ID_ETAPE_FL_DEP_2 AND lex.TYP_ETAPE_FL= 7
+            AND lex.ID_DOC_1 = ec.id_info
+        UNION
+        select ec.id_info, ec.date_doc, lop.mnt_ttc_euro
+            from NCCC_ETAPE_FL_DEP im, NCCC_ETAPE_FL_DEP lop, NCCC_ETAPE_FL_DEP lex, NCCC_DOCUMENT op, NCCC_DOCUMENT ec
+        WHERE im.ID_INFO  = #{imputationId, javaType=Long}
+            AND im.ID_INFO = lop.ID_ETAPE_FL_DEP_1 AND lop.TYP_ETAPE_FL= 6
+            AND lop.ID_DOCT_2 = op.id_info
+            AND lex.ID_DOCT_2 = op.id_info AND lex.TYP_ETAPE_FL= 7
+            AND lex.ID_DOC_1 = ec.id_info
+    </select>
+
+    <select id="findExtraitCompteById" resultType="hashMap">
+        select ec.id_info, ec.date_doc, lop.mnt_ttc_euro
+        from  NCCC_ETAPE_FL_DEP lop, NCCC_ETAPE_FL_DEP lex, NCCC_DOCUMENT ec
+        WHERE lop.TYP_ETAPE_FL= 6
+        AND lop.ID_INFO = lex.ID_ETAPE_FL_DEP_2 AND lex.TYP_ETAPE_FL= 7
+        AND lex.ID_DOC_1 = ec.id_info
+        and ec.id_info = #{extraitCompteId, javaType=Long}
+        UNION
+        select ec.id_info, ec.date_doc, lop.mnt_ttc_euro
+        from NCCC_ETAPE_FL_DEP lop, NCCC_ETAPE_FL_DEP lex, NCCC_DOCUMENT op, NCCC_DOCUMENT ec
+        WHERE lop.TYP_ETAPE_FL= 6
+        AND lop.ID_DOCT_2 = op.id_info
+        AND lex.ID_DOCT_2 = op.id_info AND lex.TYP_ETAPE_FL= 7
+        AND lex.ID_DOC_1 = ec.id_info
+        and ec.id_info = #{extraitCompteId, javaType=Long}
+    </select>
+
+    <select id="findReservationCredit" resultType="hashMap">
+        select id_info,
+        num,
+        an_exercice,
+        id_info_art_budget,
+        montant,
+        credit_util,
+        lib_1lg,
+        lib_2lg,
+        cmt
+        from nccc_reserv_credit
+
+        where 1 = 1
+
+        <if test="id != null">
+            and id_info = #{id, javaType=Long}
+        </if>
+
+        <if test="libelle != null">
+            and lower(lib_1lg) = lower(#{libelle, javaType=String})
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+    <select id="findSituationTiers" resultType="hashMap">
+        seleCT  'IM' as type_piece,
+        im.an_exercice || '/' || to_char(im.num_Etape_fl) as num_piece,
+        im.date_compta dt,
+        lop.MNT_TTC_EURO mnt_piece,
+        decode(nvl(lop.a_payer,'0'),'0',Decode(lop.CODE_ETAT_1,'4',lop.MNT_TTC_EURO,0),im.mnt_ttc_euro) mnt_paye_percu,
+        0 as mnt_nv,
+        0 as mnt_remb,
+        round(lop.MNT_TTC_EURO - decode(nvl(lop.a_payer,'0'),'0',Decode(lop.CODE_ETAT_1,'4',lop.MNT_TTC_EURO,0),im.mnt_ttc_euro),2) as mnt_solde,
+        im.lib_1lg as libelle,
+        nvl(im.NUM_FACTURE_F,im.reference) as reference,
+        art.article as article,
+        '1' as Indicateur_benef -- lié à la loop et différent du tiers du flux
+        from nccc_tiers tie
+        inner join nccc_cpt_part_tiers cti on cti.id_info_tiers = tie.id_info
+
+        inner join nccc_etape_Fl_dep lop on lop.ID_CPT_PART_TIERS_BENEF=cti.id_info_Cpt_part  and lop.typ_etape_fl=6 <![CDATA[ and nvl(lop.code_etat_2,'0') <> '1' ]]> and nvl(lop.a_payer,'0')='0'
+        inner join nccc_flux_dep fl on  lop.id_info_flux = fl.id_info  <![CDATA[ and fl.ID_CPT_PART_TIERS_PRINC <> cti.id_info_Cpt_part ]]>
+        inner join nccc_etape_Fl_dep im on  im.id_info = lop.id_etape_fl_dep_1 and im.typ_etape_fl=5
+        inner join nccc_art_budget art on art.ID_INFO_ART_BUDGET = fl.ID_INFO_ART_BUDGET
+        where tie.id_info = #{id, javaType=Long}
+        <if test="dateDeb != null">
+            <![CDATA[ and im.date_compta >= #{dateDeb, javaType=Date} ]]>
+        </if>
+        <if test="dateFin != null">
+            <![CDATA[ and im.date_compta <= #{dateFin, javaType=Date} ]]>
+        </if>
+        <if test="nonSoldee==true">
+            <![CDATA[ and  round(lop.MNT_TTC_EURO - decode(nvl(lop.a_payer,'0'),'0',Decode(lop.CODE_ETAT_1,'4',lop.MNT_TTC_EURO,0),im.mnt_ttc_euro),2) <>0 ]]>
+        </if>
+        union
+
+        seleCT  'IM' as type_piece,
+        im.an_exercice || '/' || to_char(im.num_Etape_fl) as num_piece,
+        im.date_compta dt,
+        lop.MNT_TTC_EURO mnt_piece,
+        decode(nvl(lop.a_payer,'0'),'0',Decode(lop.CODE_ETAT_1,'4',lop.MNT_TTC_EURO,0),im.mnt_ttc_euro) mnt_paye_percu,
+        0 as mnt_nv,
+        0 as mnt_remb,
+        round(lop.MNT_TTC_EURO - decode(nvl(lop.a_payer,'0'),'0',Decode(lop.CODE_ETAT_1,'4',lop.MNT_TTC_EURO,0),im.mnt_ttc_euro),2) as mnt_solde,
+        im.lib_1lg as libelle,
+        nvl(im.NUM_FACTURE_F,im.reference) as reference,
+        art.article as article,
+        '0' as Indicateur_benef --lié directement au tiers (flux)
+        from nccc_tiers tie
+        inner join nccc_cpt_part_tiers cti on cti.id_info_tiers = tie.id_info
+        inner join nccc_flux_dep fl on fl.ID_CPT_PART_TIERS_PRINC =cti.id_info_Cpt_part
+        inner join nccc_etape_Fl_dep im on  im.id_info_flux = fl.id_info and im.typ_etape_fl=5
+        inner join nccc_etape_Fl_dep lop on  lop.id_info_flux = fl.id_info and lop.typ_etape_fl=6 <![CDATA[ and nvl(lop.code_etat_2,'0') <> '1' ]]> and nvl(lop.a_payer,'0')='0' and lop.id_etape_Fl_Dep_1 = im.id_info
+        inner join nccc_art_budget art on art.ID_INFO_ART_BUDGET = fl.ID_INFO_ART_BUDGET
+        where tie.id_info = #{id, javaType=Long}
+        <if test="dateDeb != null">
+            <![CDATA[ and im.date_compta >= #{dateDeb, javaType=Date} ]]>
+        </if>
+        <if test="dateFin != null">
+            <![CDATA[ and im.date_compta <= #{dateFin, javaType=Date} ]]>
+        </if>
+        <if test="nonSoldee==true">
+            <![CDATA[ and  round(lop.MNT_TTC_EURO - decode(nvl(lop.a_payer,'0'),'0',Decode(lop.CODE_ETAT_1,'4',lop.MNT_TTC_EURO,0),im.mnt_ttc_euro),2) <>0 ]]>
+        </if>
+        union
+        seleCT 'DD' as type_piece,
+        dd.an_exercice || '/' || to_char(dd.num_Etape_fl) as num_piece,
+        dd.date_compta dt,
+        dd.MNT_TTC_EURO mnt_piece,
+        round(dd.MNT_TTC_EURO -  Nccc_Get_Sum_Nv_Sur_Dd(dD.id_info,'EURO') - decode(nvl(a_payer,'0'),'0',dd.calcul1_EURO,0),2)  mnt_paye_percu,
+        Nccc_Get_Sum_Nv_Sur_Dd(dD.id_info,'EURO') as mnt_nv,
+        0 as mnt_remb,
+        round(decode(nvl(a_payer,'0'),'0',dd.calcul1_EURO,0),2) as mnt_solde,
+        dd.lib_1lg as libelle,
+        dd.reference as reference,
+        art.article as article,
+        '1' as Indicateur_benef
+        from nccc_tiers tie
+        inner join nccc_cpt_part_tiers cti on cti.id_info_tiers = tie.id_info
+        inner join nccc_etape_Fl_dep dd on   cti.id_info_Cpt_part = DD.ID_CPT_PART_TIERS_BENEF and dd.typ_etape_fl=21
+        inner join nccc_flux_dep fl on fl.ID_info =dD.id_info_flux  and <![CDATA[ fl.ID_CPT_PART_TIERS_PRINC  <> cti.id_info_Cpt_part ]]>
+        inner join nccc_art_budget art on art.ID_INFO_ART_BUDGET = fl.ID_INFO_ART_BUDGET
+        where tie.id_info = #{id, javaType=Long}
+        <if test="dateDeb != null">
+            <![CDATA[ and dd.date_compta >= #{dateDeb, javaType=Date} ]]>
+        </if>
+        <if test="dateFin != null">
+            <![CDATA[ and dd.date_compta <= #{dateFin, javaType=Date} ]]>
+        </if>
+        <if test="nonSoldee==true">
+            <![CDATA[ and round(decode(nvl(a_payer,'0'),'0',dd.calcul1_EURO,0),2) <>0 ]]>
+        </if>
+        union
+        seleCT 'DD' as type_piece,
+        dd.an_exercice || '/' || to_char(dd.num_Etape_fl) as num_piece,
+        dd.date_compta dt,
+        dd.MNT_TTC_EURO mnt_piece,
+        round(dd.MNT_TTC_EURO -  Nccc_Get_Sum_Nv_Sur_Dd(dD.id_info,'EURO') - decode(nvl(a_payer,'0'),'0',dd.calcul1_EURO,0),2)  mnt_paye_percu,
+        Nccc_Get_Sum_Nv_Sur_Dd(dD.id_info,'EURO') as mnt_nv,
+        0 as mnt_remb,
+        round(decode(nvl(a_payer,'0'),'0',dd.calcul1_EURO,0),2) as mnt_solde,
+        dd.lib_1lg as libelle,
+        dd.reference as reference,
+        art.article as article,
+        '0' as Indicateur_benef
+        from nccc_tiers tie
+        inner join nccc_cpt_part_tiers cti on cti.id_info_tiers = tie.id_info
+        inner join nccc_etape_Fl_dep dd on   cti.id_info_Cpt_part = DD.ID_CPT_PART_TIERS_BENEF and dd.typ_etape_fl=21
+        inner join nccc_flux_dep fl on fl.ID_info =dD.id_info_flux
+        inner join nccc_art_budget art on art.ID_INFO_ART_BUDGET = fl.ID_INFO_ART_BUDGET
+        where tie.id_info = #{id, javaType=Long}
+        <if test="dateDeb != null">
+            <![CDATA[ and dd.date_compta >= #{dateDeb, javaType=Date} ]]>
+        </if>
+        <if test="dateFin != null">
+            <![CDATA[ and dd.date_compta <= #{dateFin, javaType=Date} ]]>
+        </if>
+        <if test="nonSoldee==true">
+            <![CDATA[ and round(decode(nvl(a_payer,'0'),'0',dd.calcul1_EURO,0),2) <>0 ]]>
+        </if>
+
+
+    </select>
+
+    <update id="updateContactTiers"  parameterType="InfoTiers" statementType="CALLABLE">
+        { CALL NCCC_PACK_EGOV.NCCC_MAJ_TIERS_PEPH(
+            #{idInfo, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{numNiss, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{numBCE, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{nom, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{prenom, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{dtNaiss, mode=IN, jdbcType=DATE, javaType=Date},
+            #{typTiers, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{codCivil, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{email, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{numTelephone, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{nomRue, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{numRue, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{boite, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{codPostal, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{localite, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{pays, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{code_pays, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{nomRue2, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{numRue2, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{boite2, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{codPostal2, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{localite2, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{pays2, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{code_pays2, mode=IN, jdbcType=BIGINT, javaType=Long},
+            #{comment, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{codeRetour, mode=OUT, jdbcType=VARCHAR, javaType=String},
+            #{etatCession, mode=IN, jdbcType=VARCHAR, javaType=String},
+            #{idInfoTiersRemp, mode=IN, jdbcType=BIGINT, javaType=Long}
+        )
+         }
+    </update>
+
+    <insert id="insertContactTiers"  parameterType="InfoTiers" statementType="CALLABLE">
+        { CALL NCCC_PACK_EGOV.NCCC_INSERT_TIERS_PEPH(
+        #{typTiers, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{numNiss, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{numBCE, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{nom, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{prenom, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{dtNaiss, mode=IN, jdbcType=DATE, javaType=Date},
+        #{email, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{numTelephone, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{nomRue, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{numRue, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{boite, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{codPostal, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{localite, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{pays, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{code_pays, mode=IN, jdbcType=BIGINT, javaType=Long},
+        #{nomRue2, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{numRue2, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{boite2, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{codPostal2, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{localite2, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{pays2, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{code_pays2, mode=IN, jdbcType=BIGINT, javaType=Long},
+        #{comment, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{codCivil, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{idInfo, mode=OUT, jdbcType=BIGINT, javaType=Long},
+        '0',
+        '0',
+        #{codeRetour, mode=OUT, jdbcType=VARCHAR, javaType=String},
+        #{etatCession, mode=IN, jdbcType=VARCHAR, javaType=String},
+        #{idInfoTiersRemp, mode=IN, jdbcType=BIGINT, javaType=Long}
+        )
+        }
+    </insert>
+
+    <select id="findNaturePatrimoineByCriteria" resultType="hashMap" parameterType="hashMap">
+        select distinct lib.cod,
+               lib.lib
+          from nccc_art_budget art ,
+               nccc_code_economique eco,
+               nccc_comptes_generaux gen,
+               nccc_codes_descriptifs_lib lib
+         where art.id_info_codeco= eco.id_info_codeco  and
+               ECO.ID_INFO_CPTG1 = gen.ID_INFO_CPT_GEN and
+               LIB.COD = substr(GEN.NUM_COMPTE_GEN,2,3) and lib.cod_lang ='*' and
+               <![CDATA[ replace(cod_Typ,'&','@') in ('AIC_NATU','BT_NATU','IMF_NATU','LEA_NATU','M@M_NATU','MTE_NATU','O@C_NATU','PAR_NATU','PLA_NATU','PLE_NATU','PRE_NATU','SUC_NATU','TRA_NATU','VOI_NATU')]]>
+
+        <if test="article != null">
+            and  art.id_info_art_budget = #{article, javaType=String}
+        </if>
+
+        <if test="articlelike != null">
+            and  lower(trim(art.article)) like lower(#{articlelike, javaType=String} ||'%')
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+
+
+     <select id="deleteReservCredit" parameterType="DelReservCredit" statementType="CALLABLE">
+          { CALL NCCC_PACK_EGOV.nccc_del_reserv_credit(
+           #{id_info, mode=IN, jdbcType=BIGINT, javaType=Long},
+           #{code_retour, mode=OUT, jdbcType=VARCHAR, javaType=String}
+           ) }
+      </select>
+
+
+
+    <select id="findGroupeByCriteria" resultType="hashMap" parameterType="hashMap">
+        select  distinct grp.id_info,
+                GROUPE,
+                LIB_1LG,
+                LIB_2LG
+           from nccc_sec_groupe grp
+           <if test="utilisateur != null">
+                ,nccc_sec_groupe_user usr
+           </if>
+          where grp.actif = '1'
+           <if test="utilisateur != null">
+               and usr.actif='1'
+               and grp.id_info = usr.id_info_Grp
+               and lower(utilisateur) =lower( #{utilisateur, javaType=String})
+           </if>
+    </select>
+
+    <select id="countCodeEconomiqueByCriteria" resultType="long" parameterType="hashMap">
+        select count(*) from (
+            select eco.ID_INFO_CODECO
+            from nccc_code_economique eco
+            where 1 = 1
+            <if test="exercice != null">
+                and eco.AN_EXERC_BUDGET = #{exercice, javaType=String}
+            </if>
+            <if test="code != null">
+                and lower(eco.COD_ECO_NUM_ORDRE) like lower(#{code, javaType=String})
+            </if>
+            <if test="libelle != null">
+                and lower(eco.LIB_COURT_1LG) like lower(#{libelle, javaType=String})
+            </if>
+            <if test="cod_dep_recette != null">
+                and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+            </if>
+            <if test="cod_ordi_extra != null">
+                and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+            </if>
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+            )
+    </select>
+
+    <select id="findCodeEconomiqueIdsByCriteria" resultType="long" parameterType="hashMap">
+        select eco.ID_INFO_CODECO
+        from nccc_code_economique eco
+        where 1 = 1
+        <if test="exercice != null">
+            and eco.AN_EXERC_BUDGET = #{exercice, javaType=String}
+        </if>
+        <if test="code != null">
+            and lower(eco.COD_ECO_NUM_ORDRE) like lower(#{code, javaType=String})
+        </if>
+        <if test="libelle != null">
+            and lower(eco.LIB_COURT_1LG) like lower(#{libelle, javaType=String})
+        </if>
+        <if test="cod_dep_recette != null">
+            and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+        </if>
+        <if test="cod_ordi_extra != null">
+            and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+        </if>
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+    </select>
+
+    <select id="findCodeEconomiqueListByCriteria" resultType="hashMap" parameterType="hashMap">
+        select  eco.ID_INFO_CODECO,
+                eco.AN_EXERC_BUDGET,
+                eco.COD_ECO,
+                eco.NUM_ORD,
+                eco.COD_ECO_NUM_ORDRE,
+                eco.LIB_COURT_1LG,
+                decode(eco.cod_dep_recette,'10','Depense','Recette') as type,
+                decode(eco.cod_srv,'10','Ordinaire','Extraordinaire') as service
+        from nccc_code_economique eco
+        where 1 = 1
+        <if test="exercice != null">
+            and eco.AN_EXERC_BUDGET = #{exercice, javaType=String}
+        </if>
+        <if test="code != null">
+            and lower(eco.COD_ECO_NUM_ORDRE) like lower(#{code, javaType=String})
+        </if>
+        <if test="libelle != null">
+            and lower(eco.LIB_COURT_1LG) like lower(#{libelle, javaType=String})
+        </if>
+        <if test="cod_dep_recette != null">
+            and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+        </if>
+        <if test="cod_ordi_extra != null">
+            and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+        </if>
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+    </select>
+
+    <select id="countCodeFonctionnelByCriteria" resultType="long" parameterType="hashMap">
+        select count(*) from (
+            select fct.ID_INFO_CODFONC
+            from nccc_codes_fonctionnels fct
+            where 1 = 1
+            <if test="exercice != null">
+                and fct.AN_EXERC_BUDGET = #{exercice, javaType=String}
+            </if>
+            <if test="code != null">
+                and lower(fct.COD_FONCT) like lower(#{code, javaType=String})
+            </if>
+            <if test="libelle != null">
+                and lower(fct.LIB_COURT_1LG) like lower(#{libelle, javaType=String})
+            </if>
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+        )
+    </select>
+
+    <select id="findCodeFonctionnelIdsByCriteria" resultType="long" parameterType="hashMap">
+        select fct.ID_INFO_CODFONC
+            from nccc_codes_fonctionnels fct
+        where 1 = 1
+        <if test="exercice != null">
+            and fct.AN_EXERC_BUDGET = #{exercice, javaType=String}
+        </if>
+        <if test="code != null">
+            and lower(fct.COD_FONCT) like lower(#{code, javaType=String})
+        </if>
+        <if test="libelle != null">
+            and lower(fct.LIB_COURT_1LG) like lower(#{libelle, javaType=String})
+        </if>
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+    </select>
+
+    <select id="findCodeFonctionnelListByCriteria" resultType="hashMap" parameterType="hashMap">
+        select  fct.ID_INFO_CODFONC,
+                fct.AN_EXERC_BUDGET,
+                fct.COD_FONCT,
+                fct.LIB_COURT_1LG
+        from nccc_codes_fonctionnels fct
+        where 1 = 1
+        <if test="exercice != null">
+            and fct.AN_EXERC_BUDGET = #{exercice, javaType=String}
+        </if>
+        <if test="code != null">
+            and lower(fct.COD_FONCT) like lower(#{code, javaType=String})
+        </if>
+        <if test="libelle != null">
+            and lower(fct.LIB_COURT_1LG) like lower(#{libelle, javaType=String})
+        </if>
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+    </select>
+
+    <select id="countArticlesByCriteria" resultType="long" parameterType="hashMap">
+        select count(*) from (
+            select art.id_info_art_budget
+            from nccc_art_budget art,
+            nccc_code_economique eco
+
+            <if test="codeProjet!=null">
+                , NCCC_PROJET_EXT projet
+            </if>
+
+            <if test="isSousBudget==false">
+                <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+                <!-- si utilisation des sous-budget, l'identifiant du departement est une foreignKey dans l'article -->
+                <if test="whereDepIdsWithoutSousBudget != null">
+                    , NCCC_ARTICLE_DEPARTEMENT ARTDEP
+                </if>
+            </if>
+
+            <if test="whereGroupIds != null">
+                ,nccc_sec_groupe_article sec ,
+                nccc_sec_groupe grp
+            </if>
+
+            where ART.ID_INFO_CODECO = ECO.ID_INFO_CODECO
+
+            <if test="codeProjet!=null">
+                and projet.ID_INFO_PRJ(+) = ART.ID_INFO_PRJ
+            </if>
+
+            <if test="isSousBudget==false">
+                <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+                <if test="whereDepIdsWithoutSousBudget != null">
+                    and ART.ID_INFO_ART_BUDGET = ARTDEP.ID_INFO_ART_BUDGET
+                    and ( ${whereDepIdsWithoutSousBudget} )
+                </if>
+            </if>
+
+            <!-- si utilisation des sous-budgets, on va regarder les departements dans l'article -->
+
+            <if test="isSousBudget==true">
+                <if test="whereDepIdsWithSousBudget != null">
+                    and ( ${whereDepIdsWithSousBudget} )
+                </if>
+            </if>
+
+            <if test="whereGroupIds != null">
+                and SEC.ID_INFO_ART_BUDGET  = ART.ID_INFO_ART_BUDGET
+                and grp.id_info = SEC.ID_INFO_GRP and
+                <!-- le choix 1 signifie que le groupe a acces a tous les articles -->
+                <![CDATA[ grp.choix <> '1' ]]>
+                and ( ${whereGroupIds} )
+            </if>
+
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+
+            <if test="cod_dep_recette != null">
+                and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+            </if>
+            <if test="cod_ordi_extra != null">
+                and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+            </if>
+            <if test="exercice != null">
+                and art.an_exercice = #{exercice, javaType=String}
+            </if>
+
+            <if test="isCodeStrict==true">
+                <if test="code != null">
+                    and lower(art.article) like  lower(#{code, javaType=String})
+                </if>
+            </if>
+            <if test="isCodeStrict==false">
+                <if test="code != null">
+                    and lower(art.article) like  lower('%' || #{code, javaType=String} || '%')
+                </if>
+            </if>
+
+            <if test="projetId!=null">
+                and art.ID_INFO_PRJ = #{projetId, javaType=Long}
+            </if>
+
+            <if test="codeProjet!=null">
+                and projet.COD_PRJ = #{codeProjet, javaType=String}
+            </if>
+
+            <if test="withMillesime!=null">
+                <if test="withMillesime==true">
+                    and art.an_exercice != art.an_millesime
+                </if>
+                <if test="withMillesime==false">
+                    and art.an_exercice = art.an_millesime
+                </if>
+            </if>
+
+            UNION
+            select art.id_info_art_budget
+            from nccc_art_budget art,
+            nccc_code_economique eco,
+            nccc_sec_groupe grp
+
+            <if test="codeProjet!=null">
+                , NCCC_PROJET_EXT projet
+            </if>
+
+            <if test="isSousBudget==false">
+                <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+                <!-- si utilisation des sous-budget, l'identifiant du departement est une foreignKey dans l'article -->
+                <if test="whereDepIdsWithoutSousBudget != null">
+                    , NCCC_ARTICLE_DEPARTEMENT ARTDEP
+                </if>
+            </if>
+
+            where ART.ID_INFO_CODECO = ECO.ID_INFO_CODECO and
+            <!-- le choix 1 signifie que le groupe a acces a tous les articles -->
+            grp.choix = '1'
+
+            <if test="codeProjet!=null">
+                and projet.ID_INFO_PRJ(+) = ART.ID_INFO_PRJ
+            </if>
+
+            <if test="isSousBudget==false">
+                <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+                <if test="whereDepIdsWithoutSousBudget != null">
+                    and ART.ID_INFO_ART_BUDGET = ARTDEP.ID_INFO_ART_BUDGET
+                    and ( ${whereDepIdsWithoutSousBudget} )
+                </if>
+            </if>
+
+            <!-- si utilisation des sous-budgets, on va regarder les departements dans l'article -->
+
+            <if test="isSousBudget==true">
+                <if test="whereDepIdsWithSousBudget != null">
+                    and ( ${whereDepIdsWithSousBudget} )
+                </if>
+            </if>
+
+            <if test="whereGroupIds != null">
+                and ( ${whereGroupIds} )
+            </if>
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+            <if test="cod_dep_recette != null">
+                and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+            </if>
+            <if test="cod_ordi_extra != null">
+                and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+            </if>
+            <if test="exercice != null">
+                and art.an_exercice = #{exercice, javaType=String}
+            </if>
+
+            <if test="isCodeStrict==true">
+                <if test="code != null">
+                    and lower(art.article) like lower(#{code, javaType=String})
+                </if>
+            </if>
+            <if test="isCodeStrict==false">
+                <if test="code != null">
+                    and lower(art.article) like lower('%' || #{code, javaType=String} || '%')
+                </if>
+            </if>
+
+            <if test="projetId!=null">
+                and art.ID_INFO_PRJ = #{projetId, javaType=Long}
+            </if>
+
+            <if test="codeProjet!=null">
+                and projet.COD_PRJ = #{codeProjet, javaType=String}
+            </if>
+
+            <if test="withMillesime!=null">
+                <if test="withMillesime==true">
+                    and art.an_exercice != art.an_millesime
+                </if>
+                <if test="withMillesime==false">
+                    and art.an_exercice = art.an_millesime
+                </if>
+            </if>
+
+        )
+    </select>
+
+
+    <select id="findArticleIdsByCriteria" resultType="long" parameterType="hashMap">
+        select art.id_info_art_budget
+        from nccc_art_budget art,
+        nccc_code_economique eco
+
+        <if test="codeProjet!=null">
+            , NCCC_PROJET_EXT projet
+        </if>
+
+        <if test="isSousBudget==false">
+            <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <!-- si utilisation des sous-budget, l'identifiant du departement est une foreignKey dans l'article -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                , NCCC_ARTICLE_DEPARTEMENT ARTDEP
+            </if>
+        </if>
+
+        <if test="whereGroupIds != null">
+            ,nccc_sec_groupe_article sec ,
+            nccc_sec_groupe grp
+        </if>
+
+        where ART.ID_INFO_CODECO = ECO.ID_INFO_CODECO
+
+        <if test="codeProjet!=null">
+            and projet.ID_INFO_PRJ(+) = ART.ID_INFO_PRJ
+        </if>
+
+        <if test="isSousBudget==false">
+            <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                and ART.ID_INFO_ART_BUDGET = ARTDEP.ID_INFO_ART_BUDGET
+                and ( ${whereDepIdsWithoutSousBudget} )
+            </if>
+        </if>
+
+        <!-- si utilisation des sous-budgets, on va regarder les departements dans l'article -->
+
+        <if test="isSousBudget==true">
+            <if test="whereDepIdsWithSousBudget != null">
+                and ( ${whereDepIdsWithSousBudget} )
+            </if>
+        </if>
+
+        <if test="whereGroupIds != null">
+            and SEC.ID_INFO_ART_BUDGET  = ART.ID_INFO_ART_BUDGET
+            and grp.id_info = SEC.ID_INFO_GRP and
+            <!-- le choix 1 signifie que le groupe a acces a tous les articles -->
+            <![CDATA[ grp.choix <> '1' ]]>
+            and ( ${whereGroupIds} )
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="cod_dep_recette != null">
+            and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+        </if>
+        <if test="cod_ordi_extra != null">
+            and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+        </if>
+        <if test="exercice != null">
+            and art.an_exercice = #{exercice, javaType=String}
+        </if>
+
+        <if test="isCodeStrict==true">
+            <if test="code != null">
+                and lower(art.article) like  lower(#{code, javaType=String})
+            </if>
+        </if>
+        <if test="isCodeStrict==false">
+            <if test="code != null">
+                and lower(art.article) like  lower('%' || #{code, javaType=String} || '%')
+            </if>
+        </if>
+
+        <if test="projetId!=null">
+            and art.ID_INFO_PRJ = #{projetId, javaType=Long}
+        </if>
+
+        <if test="codeProjet!=null">
+            and projet.COD_PRJ = #{codeProjet, javaType=String}
+        </if>
+
+        <if test="withMillesime!=null">
+            <if test="withMillesime==true">
+                and art.an_exercice != art.an_millesime
+            </if>
+            <if test="withMillesime==false">
+                and art.an_exercice = art.an_millesime
+            </if>
+        </if>
+
+        Union
+        seleCT art.id_info_art_budget
+        from nccc_art_budget art,
+        nccc_code_economique eco,
+        nccc_sec_groupe grp
+
+        <if test="codeProjet!=null">
+            , NCCC_PROJET_EXT projet
+        </if>
+
+        <if test="isSousBudget==false">
+            <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <!-- si utilisation des sous-budget, l'identifiant du departement est une foreignKey dans l'article -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                , NCCC_ARTICLE_DEPARTEMENT ARTDEP
+            </if>
+        </if>
+
+        where ART.ID_INFO_CODECO = ECO.ID_INFO_CODECO and
+        <!-- le choix 1 signifie que le groupe a acces a tous les articles -->
+        grp.choix = '1'
+
+        <if test="codeProjet!=null">
+            and projet.ID_INFO_PRJ(+) = ART.ID_INFO_PRJ
+        </if>
+
+        <if test="isSousBudget==false">
+            <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                and ART.ID_INFO_ART_BUDGET = ARTDEP.ID_INFO_ART_BUDGET
+                and ( ${whereDepIdsWithoutSousBudget} )
+            </if>
+        </if>
+
+        <!-- si utilisation des sous-budgets, on va regarder les departements dans l'article -->
+
+        <if test="isSousBudget==true">
+            <if test="whereDepIdsWithSousBudget != null">
+                and ( ${whereDepIdsWithSousBudget} )
+            </if>
+        </if>
+
+        <if test="whereGroupIds != null">
+            and ( ${whereGroupIds} )
+        </if>
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+        <if test="cod_dep_recette != null">
+            and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+        </if>
+        <if test="cod_ordi_extra != null">
+            and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+        </if>
+        <if test="exercice != null">
+            and art.an_exercice = #{exercice, javaType=String}
+        </if>
+
+        <if test="isCodeStrict==true">
+            <if test="code != null">
+                and lower(art.article) like  lower(#{code, javaType=String})
+            </if>
+        </if>
+        <if test="isCodeStrict==false">
+            <if test="code != null">
+                and lower(art.article) like  lower('%' || #{code, javaType=String} || '%')
+            </if>
+        </if>
+
+        <if test="projetId!=null">
+            and art.ID_INFO_PRJ = #{projetId, javaType=Long}
+        </if>
+
+        <if test="codeProjet!=null">
+            and projet.COD_PRJ = #{codeProjet, javaType=String}
+        </if>
+
+        <if test="withMillesime!=null">
+            <if test="withMillesime==true">
+                and art.an_exercice != art.an_millesime
+            </if>
+            <if test="withMillesime==false">
+                and art.an_exercice = art.an_millesime
+            </if>
+        </if>
+
+
+    </select>
+
+    <select id="findArticleListByCriteria" resultType="hashMap" parameterType="hashMap">
+        select art.id_info_art_budget,
+        art.an_exercice,
+        art.article,
+        art.lib_1lg,
+        art.lib_2lg,
+        FCT.ID_INFO_CODFONC,
+        fct.COD_FONCT,
+        ECO.ID_INFO_CODECO,
+        eco.COD_ECO,
+        eco.NUM_ORD,
+        eco.COD_ECO_NUM_ORDRE,
+        art.an_millesime,
+        art.code_analy_libre,
+        groupe_eco.cod_grp_eco as groupe_eco_code,
+        groupe_eco.lib_court_1LG as groupe_eco_libelle,
+        decode(eco.cod_dep_recette,'10','Depense','Recette') as type,
+        decode(eco.cod_srv,'10','Ordinaire','Extraordinaire') as service,
+        art.mnt_compte_n_moins_5_euro,
+        art.mnt_compte_n_moins_4_euro,
+        art.mnt_compte_n_moins_3_euro,
+        art.mnt_compte_n_moins_2_euro,
+        art.mnt_compte_n_moins_1_euro,
+        art.mnt_n_moins_1_euro,
+        art.mnt_adapte_n_moins_1_euro,
+        art.mnt_n_euro,
+        art.credit_actuel_dispo_euro,
+        art.calcul3_euro,
+        art.calcul4_euro,
+        art.calcul5_euro,
+        art.calcul6_euro,
+        art.reserv_credit,
+        art.reserv_util,
+        (art.reserv_credit - art.reserv_util) as reserv_non_engage,
+        <if test="withTousCredits==true">
+            nccc_get_mnt_mvt_alc_crdt_art(art.id_info_art_budget,'1|2|4|5|6','EURO',0) as tous_credits,
+            nccc_get_mnt_mvt_alc_crdt_art(art.id_info_art_budget,'1|2|4|5|6','EURO',2) as credits_en_cours,
+        </if>
+        art.is_assujetti_tva,
+        eco.cod_Dep_recette,
+        ECO.COD_SRV
+        from nccc_art_budget art,
+        nccc_codes_fonctionnels fct,
+        nccc_groupe_economique groupe_eco,
+        nccc_code_economique eco
+
+        <if test="codeProjet!=null">
+            , NCCC_PROJET_EXT projet
+        </if>
+
+        <if test="isSousBudget==false">
+            <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <!-- si utilisation des sous-budget, l'identifiant du departement est une foreignKey dans l'article -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                , NCCC_ARTICLE_DEPARTEMENT ARTDEP
+            </if>
+        </if>
+
+        <if test="whereGroupIds != null">
+            ,nccc_sec_groupe_article sec ,
+            nccc_sec_groupe grp
+        </if>
+
+        where ART.ID_INFO_CODECO = ECO.ID_INFO_CODECO
+        and ART.ID_INFO_CODFONC = FCT.ID_INFO_CODFONC
+        and groupe_eco.ID_INFO_GRPECO = ECO.id_info_grpeco(+)
+
+        <if test="codeProjet!=null">
+            and projet.ID_INFO_PRJ(+) = ART.ID_INFO_PRJ
+        </if>
+
+        <if test="whereGroupIds != null">
+            and SEC.ID_INFO_ART_BUDGET  = ART.ID_INFO_ART_BUDGET
+            and grp.id_info = SEC.ID_INFO_GRP and
+            <!-- le choix 1 signifie que le groupe a acces a tous les articles -->
+            <![CDATA[ grp.choix <> '1' ]]>
+            and ( ${whereGroupIds} )
+        </if>
+
+        <if test="isSousBudget==false">
+        <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                and ART.ID_INFO_ART_BUDGET = ARTDEP.ID_INFO_ART_BUDGET
+                and ( ${whereDepIdsWithoutSousBudget} )
+            </if>
+        </if>
+
+        <!-- si utilisation des sous-budgets, on va regarder les departements dans l'article -->
+
+        <if test="isSousBudget==true">
+            <if test="whereDepIdsWithSousBudget != null">
+                and ( ${whereDepIdsWithSousBudget} )
+            </if>
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="articleId!=null">
+            and art.id_info_art_budget = #{articleId, javaType=Long}
+        </if>
+
+        <if test="cod_dep_recette != null">
+            and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+        </if>
+        <if test="cod_ordi_extra != null">
+            and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+        </if>
+        <if test="exercice != null">
+            and art.an_exercice = #{exercice, javaType=String}
+        </if>
+
+        <if test="isCodeStrict==true">
+            <if test="code != null">
+                and lower(art.article) like  lower(#{code, javaType=String})
+            </if>
+        </if>
+        <if test="isCodeStrict==false">
+            <if test="code != null">
+                and lower(art.article) like  lower('%' || #{code, javaType=String} || '%')
+            </if>
+        </if>
+
+        <if test="projetId!=null">
+            and art.ID_INFO_PRJ = #{projetId, javaType=Long}
+        </if>
+
+        <if test="codeProjet!=null">
+            and projet.COD_PRJ = #{codeProjet, javaType=String}
+        </if>
+
+        <if test="withMillesime!=null">
+            <if test="withMillesime==true">
+                and art.an_exercice != art.an_millesime
+            </if>
+            <if test="withMillesime==false">
+                and art.an_exercice = art.an_millesime
+            </if>
+        </if>
+
+        Union
+        select art.id_info_art_budget,
+        art.an_exercice,
+        art.article,
+        art.lib_1lg,
+        art.lib_2lg,
+        FCT.ID_INFO_CODFONC,
+        fct.COD_FONCT,
+        ECO.ID_INFO_CODECO,
+        eco.COD_ECO,
+        eco.NUM_ORD,
+        eco.COD_ECO_NUM_ORDRE,
+        art.an_millesime,
+        art.code_analy_libre,
+        groupe_eco.cod_grp_eco as groupe_eco_code,
+        groupe_eco.lib_court_1LG as groupe_eco_libelle,
+        decode(eco.cod_dep_recette,'10','Depense','Recette') as type,
+        decode(eco.cod_srv,'10','Ordinaire','Extraordinaire') as service,
+        art.mnt_compte_n_moins_5_euro,
+        art.mnt_compte_n_moins_4_euro,
+        art.mnt_compte_n_moins_3_euro,
+        art.mnt_compte_n_moins_2_euro,
+        art.mnt_compte_n_moins_1_euro,
+        art.mnt_n_moins_1_euro,
+        art.mnt_adapte_n_moins_1_euro,
+        art.mnt_n_euro,
+        art.credit_actuel_dispo_euro,
+        art.calcul3_euro,
+        art.calcul4_euro,
+        art.calcul5_euro,
+        art.calcul6_euro,
+        art.reserv_credit,
+        art.reserv_util,
+        (art.reserv_credit - art.reserv_util) as reserv_non_engage,
+        <if test="withTousCredits==true">
+            nccc_get_mnt_mvt_alc_crdt_art(art.id_info_art_budget,'1|2|4|5|6','EURO',0) as tous_credits,
+            nccc_get_mnt_mvt_alc_crdt_art(art.id_info_art_budget,'1|2|4|5|6','EURO',2) as credits_en_cours,
+        </if>
+        art.is_assujetti_tva,
+        eco.cod_Dep_recette,
+        ECO.COD_SRV
+        from nccc_art_budget art,
+        nccc_codes_fonctionnels fct,
+        nccc_groupe_economique groupe_eco,
+        nccc_code_economique eco,
+        nccc_sec_groupe grp
+
+        <if test="codeProjet!=null">
+            , NCCC_PROJET_EXT projet
+        </if>
+
+        <if test="isSousBudget==false">
+            <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <!-- si utilisation des sous-budget, l'identifiant du departement est une foreignKey dans l'article -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                , NCCC_ARTICLE_DEPARTEMENT ARTDEP
+            </if>
+        </if>
+
+        where ART.ID_INFO_CODECO = ECO.ID_INFO_CODECO
+        and ART.ID_INFO_CODFONC = FCT.ID_INFO_CODFONC
+        and groupe_eco.ID_INFO_GRPECO = ECO.id_info_grpeco(+)
+        and
+        <!-- le choix 1 signifie que le groupe a acces a tous les articles -->
+        grp.choix = '1'
+
+        <if test="codeProjet!=null">
+            and projet.ID_INFO_PRJ(+) = ART.ID_INFO_PRJ
+        </if>
+
+        <if test="isSousBudget==false">
+            <!-- si pas d'utilisation des sous-budget, utilisation d'une table de liaison -->
+            <if test="whereDepIdsWithoutSousBudget != null">
+                and ART.ID_INFO_ART_BUDGET = ARTDEP.ID_INFO_ART_BUDGET
+                and ( ${whereDepIdsWithoutSousBudget} )
+            </if>
+        </if>
+
+        <!-- si utilisation des sous-budgets, on va regarder les departements dans l'article -->
+
+        <if test="isSousBudget==true">
+            <if test="whereDepIdsWithSousBudget != null">
+                and ( ${whereDepIdsWithSousBudget} )
+            </if>
+        </if>
+
+        <if test="whereGroupIds != null">
+            and ( ${whereGroupIds} )
+        </if>
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="articleId!=null">
+            and art.id_info_art_budget = #{articleId, javaType=Long}
+        </if>
+
+        <if test="cod_dep_recette != null">
+            and  eco.cod_dep_recette = #{cod_dep_recette, javaType=String}
+        </if>
+        <if test="cod_ordi_extra != null">
+            and  eco.cod_srv = #{cod_ordi_extra, javaType=String}
+        </if>
+        <if test="exercice != null">
+            and art.an_exercice = #{exercice, javaType=String}
+        </if>
+
+        <if test="isCodeStrict==true">
+            <if test="code != null">
+                and lower(art.article) like  lower(#{code, javaType=String})
+            </if>
+        </if>
+        <if test="isCodeStrict==false">
+            <if test="code != null">
+                and lower(art.article) like  lower('%' || #{code, javaType=String} || '%')
+            </if>
+        </if>
+
+        <if test="projetId!=null">
+            and art.ID_INFO_PRJ = #{projetId, javaType=Long}
+        </if>
+
+        <if test="codeProjet!=null">
+            and projet.COD_PRJ = #{codeProjet, javaType=String}
+        </if>
+
+        <if test="withMillesime!=null">
+            <if test="withMillesime==true">
+                and art.an_exercice != art.an_millesime
+            </if>
+            <if test="withMillesime==false">
+                and art.an_exercice = art.an_millesime
+            </if>
+        </if>
+
+    </select>
+
+    <select id="findGroupeArticleByCriteria" resultType="hashMap" parameterType="hashMap">
+        seleCT id_info,
+               groupe,
+               lib_1lg,
+               lib_2lg
+          from nccc_sec_groupe where choix =1
+         union
+        select grp.id_info,
+               grp.groupe,
+               grp.lib_1lg,
+               grp.lib_2lg
+         from nccc_sec_groupe grp, nccc_sec_groupe_article sec
+         where grp.id_info = SEC.ID_INFO_GRP
+           and <![CDATA[ grp.choix <> '1' ]]>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+    <select id="findArticleDepartementByCriteria" resultType="hashMap">
+        seleCT ART.id_info_art_budget,
+               ART.an_exercice EXERCICE,
+               ART.article ARTICLE,
+               ART.LIB_1LG LIB_ARTICLE,
+               ART.IS_ASSUJETTI_TVA,
+               DEP.COD_DEPART COD_DEPART,
+               DEP.LIB_1LG LIB_DEPARTEMENT,
+               DEP.ID_INFO_DEPART
+        from NCCC_ART_BUDGET ART
+
+        <if test="isSousBudget==false">
+            , NCCC_ARTICLE_DEPARTEMENT ARTDEP ,NCCC_DEPARTEMENT DEP
+            WHERE ART.ID_INFO_ART_BUDGET = ARTDEP.ID_INFO_ART_BUDGET and
+            DEP.ID_INFO_DEPART = ARTDEP.ID_INFO_DEPART
+        </if>
+
+        <if test="isSousBudget==true">
+            , NCCC_DEPARTEMENT DEP
+            WHERE DEP.ID_INFO_DEPART = ART.id_info_depart
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+
+        <if test="whereDepIds != null">
+            and ( ${whereDepIds} )
+        </if>
+
+        <if test="cod_depart != null">
+            and lower(cod_depart) = lower(#{cod_depart, javaType=String})
+        </if>
+
+        <if test="exercice != null">
+            and art.an_exercice = #{exercice, javaType=String}
+        </if>
+        <if test="article != null">
+            and ART.id_info_art_budget = #{article, javaType=String}
+        </if>
+
+
+    </select>
+
+    <select id="isSousBudget" resultType="boolean" >
+        select sous_budget from nccc_parametres_communs
+    </select>
+
+
+    <select id="findCompteGeneralIdByExerciceAndCode"  resultType="Long" parameterType="hashMap">
+        select min(id_info_cpt_gen)
+        from nccc_comptes_generaux
+        where 1=1
+        <if test="exercice != null">
+            and an_Exerc_budget= #{exercice, javaType=String}
+        </if>
+        and num_compte_gen= #{cg, javaType=String}
+
+    </select>
+
+    <select id="findCompteParticulierIdByCode"  resultType="Long" parameterType="hashMap">
+        select min(id_info)
+        from nccc_cpt_part
+        where num_compte_particul = #{cp, javaType=String}
+
+    </select>
+
+    <select id="findPlanComptableByExerciceAndCodeEco"  resultType="hashMap" parameterType="hashMap">
+        SELECT  NCCC_CODE_ECONOMIQUE.cod_eco_num_ordre, GEN1.NUM_COMPTE_GEN num_CHARGE_PRODUIT,
+        GEN1.LIB_COURT_1LG lib_CHARGE_PRODUIT_1LG,
+        GEN1.LIB_COURT_2LG lib_CHARGE_PRODUIT_2LG,
+        GEN2.NUM_COMPTE_GEN num_cptg2,
+        GEN2.LIB_COURT_1LG lib_cptg2_1lg,
+        GEN2.LIB_COURT_2LG  lib_cptg2_2lg,
+        GEN3.NUM_COMPTE_GEN num_cptg3,
+        GEN3.LIB_COURT_1LG lib_cptg3_1lg,
+        GEN3.LIB_COURT_2LG  lib_cptg3_2lg,
+        GEN4.NUM_COMPTE_GEN num_cptg4,
+        GEN4.LIB_COURT_1LG lib_cptg4_1lg,
+        GEN4.LIB_COURT_2LG  lib_cptg4_2lg,
+        GEN5.NUM_COMPTE_GEN num_cptg5,
+        GEN5.LIB_COURT_1LG lib_cptg5_1lg,
+        GEN5.LIB_COURT_2LG  lib_cptg5_2lg,
+        GEN6.NUM_COMPTE_GEN num_cptg6,
+        GEN6.LIB_COURT_1LG lib_cptg6_1lg,
+        GEN6.LIB_COURT_2LG  lib_cptg6_2lg,
+        GEN7.NUM_COMPTE_GEN num_cptg7,
+        GEN7.LIB_COURT_1LG lib_cptg7_1lg,
+        GEN7.LIB_COURT_2LG  lib_cptg7_2lg,
+        GEN8.NUM_COMPTE_GEN num_cptg8,
+        GEN8.LIB_COURT_1LG lib_cptg8_1lg,
+        GEN8.LIB_COURT_2LG  lib_cptg8_2lg
+        FROM NCCC_CODE_ECONOMIQUE,
+        NCCC_COMPTES_GENERAUX GEN1,
+        NCCC_COMPTES_GENERAUX GEN2,
+        NCCC_COMPTES_GENERAUX GEN3,
+        NCCC_COMPTES_GENERAUX GEN4,
+        NCCC_COMPTES_GENERAUX GEN5,
+        NCCC_COMPTES_GENERAUX GEN6,
+        NCCC_COMPTES_GENERAUX GEN7,
+        NCCC_COMPTES_GENERAUX GEN8
+        WHERE
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG1 =  GEN1.ID_INFO_CPT_GEN(+) ) and
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG2 =  GEN2.ID_INFO_CPT_GEN(+) ) and
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG3 =  GEN3.ID_INFO_CPT_GEN(+) ) and
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG4 =  GEN4.ID_INFO_CPT_GEN(+) ) and
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG5 =  GEN5.ID_INFO_CPT_GEN(+) ) and
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG6 =  GEN6.ID_INFO_CPT_GEN(+) ) and
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG7 =  GEN7.ID_INFO_CPT_GEN(+) ) and
+        ( NCCC_CODE_ECONOMIQUE.ID_INFO_CPTG8 =  GEN8.ID_INFO_CPT_GEN(+) ) and
+        NCCC_CODE_ECONOMIQUE.cod_eco_num_ordre= #{codeEco, javaType=String} and
+        NCCC_CODE_ECONOMIQUE.an_exerc_budget= #{exercice, javaType=Integer}
+    </select>
+
+
+    <select id="findComptePatrimoineByCriteria"  resultType="hashMap" parameterType="hashMap">
+        SELECT NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL CPT_PATRIM,
+               NCCC_CPT_PART_A.ID_INFO ID_PATRIM,
+               NVL(NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,NCCC_PATRIMOINE_ET_DETTE_B.COD_NAT) cod_nat,
+               nccc_get_cod_descr_lib(NCCC_PATRIMOINE_ET_DETTE_A.TYP_COD_NAT,NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,'*') LIB_NAT,
+               NCCC_PATRIMOINE_ET_DETTE_A.NUM num_NAT,
+               Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_1LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_1LG) lib_1lg,
+               Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_2LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_2LG) lib_2lg,
+               NCCC_CODES_FONCTIONNELS.COD_FONCT
+        FROM NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_A,
+               NCCC_CPT_PART NCCC_CPT_PART_A,
+               NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_B,
+               NCCC_CPT_PART NCCC_CPT_PART_B,
+               NCCC_CODES_FONCTIONNELS
+        WHERE ( NCCC_PATRIMOINE_ET_DETTE_A.id_info_cpt_part = NCCC_CPT_PART_A.id_info  ) and
+              ( NCCC_PATRIMOINE_ET_DETTE_A.id_bien_1 = NCCC_PATRIMOINE_ET_DETTE_B.id_info (+)) and
+              ( NCCC_PATRIMOINE_ET_DETTE_B.id_info_cpt_part = NCCC_CPT_PART_B.id_info (+))  and (NVL(NCCC_PATRIMOINE_ET_DETTE_A.cod_nat,'000') not in( '230') or  NCCC_PATRIMOINE_ET_DETTE_A.type_b_a_m not in ('B') ) and
+              ( NCCC_PATRIMOINE_ET_DETTE_A.Type_b_a_m  not in('C') ) and
+              ( NCCC_PATRIMOINE_ET_DETTE_A.ID_INFO_CODFONC = NCCC_CODES_FONCTIONNELS.ID_INFO_CODFONC (+))
+        <if test="cod_nat != null">
+            and lower(NVL(NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,NCCC_PATRIMOINE_ET_DETTE_B.COD_NAT)) = lower(#{cod_nat, javaType=String})
+        </if>
+        <if test="num_nat != null">
+            and NCCC_PATRIMOINE_ET_DETTE_A.num = #{num_nat, javaType=Long}
+        </if>
+        <if test="lib_pat != null">
+            and lower(Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_1LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_1LG))  like lower('%' || #{lib_pat, javaType=String}||'%')
+        </if>
+        <if test="id_info_art != null">
+                 and (DECODE(SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,2),'05',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),'06',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),'08',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.COD_PREF,'D',NCCC_CPT_PART_A.COD_PREF)))
+        in (select  pref.COD_PREF||DECODE(DEB_NUM_SANS_PREF,NULL,'',DEB_NUM_SANS_PREF) from nccc_code_economique eco , nccc_Art_budget art,NCCC_PREFIXES_CPT_PART pref where art.id_info_codeco = eco.id_info_codeco and eco.id_info_cptg1 =  pref.id_info_cpt_gen and art.id_info_art_budget = #{id_info_art, javaType=Long})
+    </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+    <select id="countComptePatrimoineByCriteria"  resultType="long" parameterType="hashMap">
+        select count(*) from (
+            SELECT NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL CPT_PATRIM,
+                NCCC_CPT_PART_A.ID_INFO ID_PATRIM,
+                NVL(NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,NCCC_PATRIMOINE_ET_DETTE_B.COD_NAT) cod_nat,
+                nccc_get_cod_descr_lib(NCCC_PATRIMOINE_ET_DETTE_A.TYP_COD_NAT,NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,'*') LIB_NAT,
+                NCCC_PATRIMOINE_ET_DETTE_A.NUM num_NAT,
+                Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_1LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_1LG) lib_1lg,
+                Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_2LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_2LG) lib_2lg,
+                NCCC_CODES_FONCTIONNELS.COD_FONCT
+            FROM NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_A,
+                NCCC_CPT_PART NCCC_CPT_PART_A,
+                NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_B,
+                NCCC_CPT_PART NCCC_CPT_PART_B,
+                NCCC_CODES_FONCTIONNELS
+            WHERE ( NCCC_PATRIMOINE_ET_DETTE_A.id_info_cpt_part = NCCC_CPT_PART_A.id_info  ) and
+                ( NCCC_PATRIMOINE_ET_DETTE_A.id_bien_1 = NCCC_PATRIMOINE_ET_DETTE_B.id_info (+)) and
+                ( NCCC_PATRIMOINE_ET_DETTE_B.id_info_cpt_part = NCCC_CPT_PART_B.id_info (+))  and (NVL(NCCC_PATRIMOINE_ET_DETTE_A.cod_nat,'000') not in( '230') or  NCCC_PATRIMOINE_ET_DETTE_A.type_b_a_m not in ('B') ) and
+                ( NCCC_PATRIMOINE_ET_DETTE_A.Type_b_a_m  not in('C') ) and
+                ( NCCC_PATRIMOINE_ET_DETTE_A.ID_INFO_CODFONC = NCCC_CODES_FONCTIONNELS.ID_INFO_CODFONC (+))
+            <if test="cod_nat != null">
+                and lower(NVL(NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,NCCC_PATRIMOINE_ET_DETTE_B.COD_NAT)) = lower(#{cod_nat, javaType=String})
+            </if>
+            <if test="num_nat != null">
+                and NCCC_PATRIMOINE_ET_DETTE_A.num = #{num_nat, javaType=Long}
+            </if>
+            <if test="lib_pat != null">
+                and lower(Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_1LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_1LG))  like lower('%' || #{lib_pat, javaType=String}||'%')
+            </if>
+            <if test="id_info_art != null">
+                and (DECODE(SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,2),'05',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),'06',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),'08',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.COD_PREF,'D',NCCC_CPT_PART_A.COD_PREF)))
+                in (select  pref.COD_PREF||DECODE(DEB_NUM_SANS_PREF,NULL,'',DEB_NUM_SANS_PREF) from nccc_code_economique eco , nccc_Art_budget art,NCCC_PREFIXES_CPT_PART pref where art.id_info_codeco = eco.id_info_codeco and eco.id_info_cptg1 =  pref.id_info_cpt_gen and art.id_info_art_budget = #{id_info_art, javaType=Long})
+            </if>
+
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+        )
+    </select>
+
+
+    <select id="findComptePatrimoineIdListByCriteria" resultType="long" parameterType="hashMap">
+        SELECT NCCC_CPT_PART_A.ID_INFO
+        FROM NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_A,
+            NCCC_CPT_PART NCCC_CPT_PART_A,
+            NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_B,
+            NCCC_CPT_PART NCCC_CPT_PART_B,
+            NCCC_CODES_FONCTIONNELS
+        WHERE ( NCCC_PATRIMOINE_ET_DETTE_A.id_info_cpt_part = NCCC_CPT_PART_A.id_info  ) and
+            ( NCCC_PATRIMOINE_ET_DETTE_A.id_bien_1 = NCCC_PATRIMOINE_ET_DETTE_B.id_info (+)) and
+            ( NCCC_PATRIMOINE_ET_DETTE_B.id_info_cpt_part = NCCC_CPT_PART_B.id_info (+))  and (NVL(NCCC_PATRIMOINE_ET_DETTE_A.cod_nat,'000') not in( '230') or  NCCC_PATRIMOINE_ET_DETTE_A.type_b_a_m not in ('B') ) and
+            ( NCCC_PATRIMOINE_ET_DETTE_A.Type_b_a_m  not in('C') ) and
+            ( NCCC_PATRIMOINE_ET_DETTE_A.ID_INFO_CODFONC = NCCC_CODES_FONCTIONNELS.ID_INFO_CODFONC (+))
+        <if test="cod_nat != null">
+            and lower(NVL(NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,NCCC_PATRIMOINE_ET_DETTE_B.COD_NAT)) = lower(#{cod_nat, javaType=String})
+        </if>
+        <if test="num_nat != null">
+            and NCCC_PATRIMOINE_ET_DETTE_A.num = #{num_nat, javaType=Long}
+        </if>
+        <if test="lib_pat != null">
+            and lower(Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_1LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_1LG))  like lower('%' || #{lib_pat, javaType=String}||'%')
+        </if>
+        <if test="id_info_art != null">
+            and (DECODE(SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,2),'05',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),'06',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),'08',SUBSTR(decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL,'D',NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL),1,5),decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'B',NCCC_CPT_PART_A.COD_PREF,'D',NCCC_CPT_PART_A.COD_PREF)))
+            in (select  pref.COD_PREF||DECODE(DEB_NUM_SANS_PREF,NULL,'',DEB_NUM_SANS_PREF) from nccc_code_economique eco , nccc_Art_budget art,NCCC_PREFIXES_CPT_PART pref where art.id_info_codeco = eco.id_info_codeco and eco.id_info_cptg1 =  pref.id_info_cpt_gen and art.id_info_art_budget = #{id_info_art, javaType=Long})
+        </if>
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+    </select>
+
+    <select id="findComptePatrimoineById" resultType="hashMap">
+        SELECT NCCC_CPT_PART_A.NUM_COMPTE_PARTICUL CPT_PATRIM,
+            NCCC_CPT_PART_A.ID_INFO ID_PATRIM,
+            NVL(NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,NCCC_PATRIMOINE_ET_DETTE_B.COD_NAT) cod_nat,
+            nccc_get_cod_descr_lib(NCCC_PATRIMOINE_ET_DETTE_A.TYP_COD_NAT,NCCC_PATRIMOINE_ET_DETTE_A.COD_NAT,'*') LIB_NAT,
+            NCCC_PATRIMOINE_ET_DETTE_A.NUM num_NAT,
+            Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_1LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_1LG) lib_1lg,
+            Decode(NCCC_PATRIMOINE_ET_DETTE_A.TYPE_B_A_M,'D',NCCC_PATRIMOINE_ET_DETTE_A.TEXTE_1_200_2LG,NCCC_PATRIMOINE_ET_DETTE_A.DESCR_2LG) lib_2lg,
+            NCCC_CODES_FONCTIONNELS.COD_FONCT
+        FROM NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_A,
+        NCCC_CPT_PART NCCC_CPT_PART_A,
+        NCCC_PATRIMOINE_ET_DETTE NCCC_PATRIMOINE_ET_DETTE_B,
+        NCCC_CPT_PART NCCC_CPT_PART_B,
+        NCCC_CODES_FONCTIONNELS
+        WHERE ( NCCC_PATRIMOINE_ET_DETTE_A.id_info_cpt_part = NCCC_CPT_PART_A.id_info  ) and
+        ( NCCC_PATRIMOINE_ET_DETTE_A.id_bien_1 = NCCC_PATRIMOINE_ET_DETTE_B.id_info (+)) and
+        ( NCCC_PATRIMOINE_ET_DETTE_B.id_info_cpt_part = NCCC_CPT_PART_B.id_info (+))  and (NVL(NCCC_PATRIMOINE_ET_DETTE_A.cod_nat,'000') not in( '230') or  NCCC_PATRIMOINE_ET_DETTE_A.type_b_a_m not in ('B') ) and
+        ( NCCC_PATRIMOINE_ET_DETTE_A.Type_b_a_m  not in('C') ) and
+        ( NCCC_PATRIMOINE_ET_DETTE_A.ID_INFO_CODFONC = NCCC_CODES_FONCTIONNELS.ID_INFO_CODFONC (+))
+
+         and NCCC_CPT_PART_A.ID_INFO = #{comptePatrimoineId, javaType=Long}
+    </select>
+
+
+    <select id ="findEngagementByBonCommande" resultType="hashMap">
+        SELECT ed.ID_INFO ID_INFO,
+               ED.NUM_ETAPE_FL NUM_ED,
+               ED.AN_EXERCICE EXER_ED,
+               BC.NUM_DOC NUM_BC,
+               BC.ID_INFO ID_BC
+          FROM NCCC_DOCUMENT BC
+          LEFT JOIN NCCC_ETAPE_FL_DEP ED ON ED.ID_DOC_1 = BC.ID_INFO
+         WHERE BC.TYPE_DOC='11' AND
+               Lower(BC.AN_EXERCICE)=  lower(#{an_exercice, javaType=String})  AND
+               BC.NUM_DOC= #{num_bc, javaType=Long}
+
+    </select>
+
+
+    <select id="findGestionnaireImputateurListByCriteria" resultType="hashMap">
+        select  cpt.id_info,
+        cpt.num_compte_particul compte_particulier,
+        cpt.lib_1lg  LIB_compte_particulier_1LG,
+        cpt.lib_2lg LIB_compte_particulier_2LG,
+        tie.nom nom_tiers,
+        tie.prenom prenom_tiers
+        from nccc_cpt_part cpt
+        inner join nccc_cpt_part_tiers ctie on ctie.id_info_cpt_part= cpt.id_info
+        inner join nccc_tiers tie on tie.id_info = ctie.id_info_tiers
+        where cod_pref='003'
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="compteParticuler != null">
+            and cpt.num_compte_particul = #{compteParticuler, javaType=Long}
+        </if>
+
+        <if test="nom != null">
+            and lower(tie.nom) like  lower('%' || #{nom, javaType=String} || '%')
+        </if>
+
+        <if test="prenom != null">
+            and lower(tie.prenom) like  lower('%' || #{prenom, javaType=String} || '%')
+        </if>
+
+    </select>
+
+
+    <select id="countGestionnaireImputateurByCriteria" resultType="long" parameterType="hashMap">
+        select count(*) from (
+            select  cpt.id_info,
+            cpt.num_compte_particul compte_particulier,
+            cpt.lib_1lg  LIB_compte_particulier_1LG,
+            cpt.lib_2lg LIB_compte_particulier_2LG,
+            tie.nom nom_tiers,
+            tie.prenom prenom_tiers
+            from nccc_cpt_part cpt
+            inner join nccc_cpt_part_tiers ctie on ctie.id_info_cpt_part= cpt.id_info
+            inner join nccc_tiers tie on tie.id_info = ctie.id_info_tiers
+            where cod_pref='003'
+
+            <if test="whereIds != null">
+                and ( ${whereIds} )
+            </if>
+
+            <if test="compteParticuler != null">
+                and cpt.num_compte_particul = #{compteParticuler, javaType=Long}
+            </if>
+
+            <if test="nom != null">
+                and lower(tie.nom) like  lower('%' || #{nom, javaType=String} || '%')
+            </if>
+
+            <if test="prenom != null">
+                and lower(tie.prenom) like  lower('%' || #{prenom, javaType=String} || '%')
+            </if>
+        )
+    </select>
+
+
+    <select id="findGestionnaireImputateurIdListByCriteria" resultType="long" parameterType="hashMap">
+        select  cpt.id_info
+        from nccc_cpt_part cpt
+        inner join nccc_cpt_part_tiers ctie on ctie.id_info_cpt_part= cpt.id_info
+        inner join nccc_tiers tie on tie.id_info = ctie.id_info_tiers
+        where cod_pref='003'
+
+        <if test="whereIds != null">
+            and ( ${whereIds} )
+        </if>
+
+        <if test="compteParticuler != null">
+            and cpt.num_compte_particul = #{compteParticuler, javaType=Long}
+        </if>
+
+        <if test="nom != null">
+            and lower(tie.nom) like  lower('%' || #{nom, javaType=String} || '%')
+        </if>
+
+        <if test="prenom != null">
+            and lower(tie.prenom) like  lower('%' || #{prenom, javaType=String} || '%')
+        </if>
+    </select>
+
+    <select id="findGestionnaireImputateurById" resultType="hashMap">
+        select cpt.id_info,
+        cpt.num_compte_particul compte_particulier,
+        cpt.lib_1lg  LIB_compte_particulier_1LG,
+        cpt.lib_2lg LIB_compte_particulier_2LG,
+        tie.nom nom_tiers,
+        tie.prenom prenom_tiers
+        from nccc_cpt_part cpt
+        inner join nccc_cpt_part_tiers ctie on ctie.id_info_cpt_part= cpt.id_info
+        inner join nccc_tiers tie on tie.id_info = ctie.id_info_tiers
+        where cod_pref='003'
+        and cpt.id_info = #{gestionnaireImputateurId, javaType=Long}
+
+    </select>
+
+
+</mapper>
