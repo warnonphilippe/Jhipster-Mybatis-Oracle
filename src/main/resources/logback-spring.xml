@@ -22,7 +22,7 @@
     </appender>
 -->
 
-    <logger name="be.civadis.financeservice" level="#logback.loglevel#"/>
+    <logger name="be.phw.financeservice" level="#logback.loglevel#"/>
 
     <logger name="io.github.jhipster" level="#logback.loglevel#"/>
 

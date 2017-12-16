@@ -25,11 +25,11 @@
         <!--setting name="defaultStatementTimeout" value="25000"/-->
     </settings>
     <typeAliases>
-        <package name="be.civadis.financeservice.domain"/>
+        <package name="be.phw.financeservice.domain"/>
     </typeAliases>
     <mappers>
         <!--bug lorsque l'on indique de scanner tout un package, fonctionne en déclarer les mappers individuellement, à réessayer-->
-        <mapper resource="be/civadis/financeservice/mapper/articleBudgetMapper.xml"/>
-        <mapper resource="be/civadis/financeservice/mapper/phenixMapper.xml"/>
+        <mapper resource="be/phw/financeservice/mapper/articleBudgetMapper.xml"/>
+        <mapper resource="be/phw/financeservice/mapper/phenixMapper.xml"/>
     </mappers>
 </configuration>
